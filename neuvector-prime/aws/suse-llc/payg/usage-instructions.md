@@ -100,4 +100,23 @@ oci://709825985650.dkr.ecr.us-east-1.amazonaws.com/suse/neuvector-csp-billing-ad
 
 ## Log into the NeuVector dashboard
 
-TBD...
+The manager service type was set to Load Balancer during install. An external hostname has been assigned for accessing the NeuVector console. By default this URL is accessible from the internet. However, your organization may have placed additional restrictions on external access to your cluster. To retrieve details about the load balancer use the following command:
+
+```
+kubectl get svc -n neuvector neuvector-service-webui
+```
+
+The full dashboard url can be retrieved with the following commands:
+
+```
+SERVICE_IP=$(kubectl get svc --namespace neuvector neuvector-service-webui -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
+echo https://$SERVICE_IP:8443
+```
+
+This will print out a URL that looks like:
+
+```
+https://a1234abcde12345678a12arbc12a1-09876543210.us-west-2.elb.amazonaws.com:8443
+```
+
+This URL provides access to the NeuVector console which is running by default on port 8443.
