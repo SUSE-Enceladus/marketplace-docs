@@ -93,7 +93,7 @@ Install Neuvector into your cluster using *helm*. Customize your helm installati
 
 ```
 helm install -n neuvector neuvector --create-namespace \
-oci://709825985650.dkr.ecr.us-east-1.amazonaws.com/suse/neuvector-csp-billing-adapter-ltd/core --version 2.6.1+20230818 \
+oci://709825985650.dkr.ecr.us-east-1.amazonaws.com/suse/neuvector-csp-billing-adapter-llc/core --version 2.6.1+20230818 \
 --set awsbilling.accountNumber=$AWS_ACCOUNT_ID \
 --set awsbilling.roleName=$ROLE_NAME
 ```
