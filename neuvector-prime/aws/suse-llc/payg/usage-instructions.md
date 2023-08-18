@@ -120,3 +120,20 @@ https://a1234abcde12345678a12arbc12a1-09876543210.us-west-2.elb.amazonaws.com:84
 ```
 
 This URL provides access to the NeuVector console which is running by default on port 8443.
+
+## Updating scanner image
+
+The NeuVector scanner image is updated daily with a new CVE database. These updates are found on the NeuVector Docker hub registry. It is recommended that the image path be changed to allow for automated daily updates. This can be accomplished by modifying the scanner and updater image paths after successful deployment:
+
+```
+kubectl set image  deploy/neuvector-scanner-pod neuvector-scanner-pod=docker.io/neuvector/scanner:latest
+kubectl set image  cronjob/neuvector-updater-pod neuvector-updater-pod=docker.io/neuvector/updater:latest
+```
+
+## Navigating the console
+
+Once logged in, you can begin to [navigate and configure NeuVector](https://open-docs.neuvector.com/navigation/navigation).
+
+## More information
+
+For further information see the [AWS Marketplace Billing doc](https://open-docs.neuvector.com/deploying/awsmarketplace) and [official Neuvector documentation](https://open-docs.neuvector.com/).
