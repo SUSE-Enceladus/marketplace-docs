@@ -10,7 +10,7 @@
 
 #### OIDC provider
 
-Your EKS cluster must have an OIDC provider installed. To check for an OIDC provider first find the OIDC issuer with the following command. Substitute `$CLUSTER_NAME` with the *Name* of the EKS cluster:
+Your EKS cluster is required to have an OIDC provider installed. To check for an OIDC provider first find the OIDC issuer with the following command. Substitute `$CLUSTER_NAME` with the *Name* of the EKS cluster:
 
 ```
 aws eks describe-cluster --name $CLUSTER_NAME --query cluster.identity.oidc.issuer --output text
@@ -34,7 +34,7 @@ This will return the OIDC provider's ARN, with the ID at the end.
 
 #### IAM Role
 
-An IAM policy needs to be created and associated with a role, to provide necessary permissions. The role must also be passed as an argument during the *helm* deployment. Download [`neuvector-csp-iam-policy.json`](https://suse-marketplace-assets-public.s3.amazonaws.com/neuvector-prime/neuvector-csp-iam-policy.json) to locally inspect the policy. Create the policy with a *policy name* of your choosing:
+To provide the necessary permissions, an IAM policy and an attached role are required. The role is passed as an argument during the *helm* deployment. Download [`neuvector-csp-iam-policy.json`](https://suse-marketplace-assets-public.s3.amazonaws.com/neuvector-prime/neuvector-csp-iam-policy.json) to locally inspect the policy. Create the policy with a *policy name* of your choosing:
 
 ```
 aws iam create-policy --policy-name $POLICY_NAME --policy-document https://suse-marketplace-assets-public.s3.amazonaws.com/neuvector-prime/neuvector-csp-iam-policy.json
@@ -61,7 +61,7 @@ aws iam attach-role-policy --role-name $ROLE_NAME --policy-arn=arn:aws:iam::$AWS
 
 Create a file named `userinitcfg.yaml`, with the following template, where:
 
-* `$PASSWORD` is the initial password for the _admin_ account. **It must contain at least 8 characters, at least 1 uppercase character, at least 1 lowercase character and at least 1 number.**
+* `$PASSWORD` is the initial password for the _admin_ account. **It is required to contain at least 8 characters, at least 1 uppercase character, at least 1 lowercase character and at least 1 number.**
 
 ```
 users:
