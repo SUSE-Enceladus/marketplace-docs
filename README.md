@@ -13,6 +13,11 @@ Usage instructions for deploying SUSE products from cloud service providers' mar
 [[Offer](https://aws.amazon.com/marketplace/pp?sku=8yq550xpepyhn6uq8f4pmwv6e)]
 [[Usage Instructions](neuvector-prime/aws/suse-llc/payg/usage-instructions.md)]
 
+##### Long term/private offers
+
+[[Offer](https://aws.amazon.com/marketplace/pp?sku=br39i474i9dxutw9dgemvijnq)]
+[[Usage Instructions](neuvector-prime/aws/suse-llc/lt/usage-instructions.md)]
+
 #### EU/UK Only offers
 
 #### Pay as you go
