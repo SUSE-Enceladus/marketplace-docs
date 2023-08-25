@@ -3,6 +3,7 @@
 1. These instructions assume you have an EKS cluster installed and that you have access to that cluster via a `kubeconfig`.
 2. Installation requires you have the following tools available and properly configured to access your AWS account, and your EKS cluster:
 * `aws`
+* `curl`
 * `eksctl`
 * `helm` (v3 or greater)
 
