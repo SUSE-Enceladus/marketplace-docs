@@ -3,6 +3,7 @@
 1. These instructions assume you have an EKS cluster installed and that you have access to that cluster via a `kubeconfig`.
 2. Installation requires you have the following tools available and properly configured to access your AWS account, and your EKS cluster:
 * `aws`
+* `curl`
 * `eksctl`
 * `helm` (v3 or greater)
 
@@ -37,7 +38,9 @@ This will return the OIDC provider's ARN, with the ID at the end.
 To provide the necessary permissions, an IAM policy and an attached role are required. The role is passed as an argument during the *helm* deployment. Download [`neuvector-csp-iam-policy.json`](https://suse-marketplace-assets-public.s3.amazonaws.com/neuvector-prime/neuvector-csp-iam-policy.json) to locally inspect the policy. Create the policy with a *policy name* of your choosing:
 
 ```
-aws iam create-policy --policy-name $POLICY_NAME --policy-document https://suse-marketplace-assets-public.s3.amazonaws.com/neuvector-prime/neuvector-csp-iam-policy.json
+curl https://suse-marketplace-assets-public.s3.amazonaws.com/neuvector-prime/neuvector-csp-iam-policy.json > neuvector-csp-iam-policy.json
+
+aws iam create-policy --policy-name $POLICY_NAME --policy-document file://neuvector-csp-iam-policy.json
 ```
 
 Download [`neuvector-csp-iam-role.json`](https://suse-marketplace-assets-public.s3.amazonaws.com/neuvector-prime/neuvector-csp-iam-role.json). Edit the document, where:
