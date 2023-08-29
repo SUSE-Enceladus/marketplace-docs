@@ -1,17 +1,45 @@
 <!doctype html>
-<meta charset="utf-8">
-<link rel="shortcut icon" href="{{ '/static/favicon.ico'|asseturl }}">
-<link rel="stylesheet" href="{{ '/static/style.css'|asseturl }}">
-<title>{{ this.title }}</title>
+<html class="no-js" lang="">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="{{ this.title }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ bag('lektorproject.project.url') }}">
+  <meta property="og:image" content="https://www.suse.com/assets/img/suse-social-platforms-image.png">
+
+  <!-- Place favicon.ico in the root directory -->
+
+  <link rel="stylesheet" href="{{ '/css/normalize.css'|asseturl }}">
+  <link rel="stylesheet" href="{{ '/css/grd.min.css'|asseturl }}">
+  <link rel="stylesheet" href="{{ '/css/main.css'|asseturl }}">
+  <link rel="stylesheet" href="{{ '/css/application.css'|asseturl }}">
+
+  <meta name="theme-color" content="#fafafa">
+</head>
 <body>
-  <header>
-    <h1>{{ this.title }}</h1>
-  </header>
-  <div class="page">
-    {% block body %}{% endblock %}
+  <div class="container">
+    <div class="Grid -center">
+      <div class="Cell -12of12">
+        <header>
+          <h1>{{ this.title }}</h1>
+        </header>
+      </div>
+      <div class="Cell -12of12">
+        {% block body %}{% endblock %}
+      </div>
+      <div class="Cell -12of12">
+        <footer>
+          &copy; Copyright 2023 by SUSE LLC.
+        </footer>
+      </div>
+    </div>
   </div>
-  <footer>
-    &copy; Copyright 2023 by SUSE LLC.
-  </footer>
 </body>
-<script src="{{ '/static/application.js'|asseturl }}"></script>
+<script src="{{ '/js/modernizr-3.11.2.min.js'|asseturl }}"></script>
+<script src="{{ '/js/plugins.js'|asseturl }}"></script>
+<script src="{{ '/js/application.js'|asseturl }}"></script>
+</html>
