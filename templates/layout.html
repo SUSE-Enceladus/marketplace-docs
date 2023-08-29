@@ -1,0 +1,17 @@
+<!doctype html>
+<meta charset="utf-8">
+<link rel="shortcut icon" href="{{ '/static/favicon.ico'|asseturl }}">
+<link rel="stylesheet" href="{{ '/static/style.css'|asseturl }}">
+<title>{{ this.title }}</title>
+<body>
+  <header>
+    <h1>{{ this.title }}</h1>
+  </header>
+  <div class="page">
+    {% block body %}{% endblock %}
+  </div>
+  <footer>
+    &copy; Copyright 2023 by SUSE LLC.
+  </footer>
+</body>
+<script src="{{ '/static/application.js'|asseturl }}"></script>
