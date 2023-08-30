@@ -1,6 +1,7 @@
 /* only these query params are allowed for substitution */
 const allowed_param_keys = [
 	'chart_version',
+	'repository',
 ];
 
 /*!
