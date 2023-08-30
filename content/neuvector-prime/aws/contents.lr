@@ -44,12 +44,15 @@ This will return the OIDC provider's ARN, with the ID at the end.
 To provide the necessary permissions, an IAM policy and an attached role are required. The role is passed as an argument during the *helm* deployment. Download [`neuvector-csp-iam-policy.json`](https://suse-marketplace-assets-public.s3.amazonaws.com/neuvector-prime/neuvector-csp-iam-policy.json) to locally inspect the policy. Create the policy with a *policy name* of your choosing:
 
 ```
-curl https://suse-marketplace-assets-public.s3.amazonaws.com/neuvector-prime/neuvector-csp-iam-policy.json > neuvector-csp-iam-policy.json
+curl https://suse-marketplace-assets-public.s3.amazonaws.com/neuvector-prime/neuvector-csp-iam-policy.json \
+  > neuvector-csp-iam-policy.json
 
-aws iam create-policy --policy-name $POLICY_NAME --policy-document file://neuvector-csp-iam-policy.json
+aws iam create-policy \
+  --policy-name $POLICY_NAME \
+  --policy-document file://neuvector-csp-iam-policy.json
 ```
 
-Download [`neuvector-csp-iam-role.json`](https://suse-marketplace-assets-public.s3.amazonaws.com/neuvector-prime/neuvector-csp-iam-role.json). Edit the document, where:
+Download [`neuvector-csp-iam-role.json`](https://suse-marketplace-assets-public.s3.amazonaws.com/neuvector-prime/neuvector-csp-iam-role.json) to your current working directory. Edit the document, where:
 
 * `$AWS_ACCOUNT_ID` is your 12-digit AWS account ID (no-dashes)
 * `$OIDC_PROVIDER_IDENTITY` is the *OIDC Provider Identity*
@@ -57,20 +60,26 @@ Download [`neuvector-csp-iam-role.json`](https://suse-marketplace-assets-public.
 The role can then be created with a *role name* of your choosing:
 
 ```
-aws iam create-role --role-name $ROLE_NAME --assume-role-policy-document file://path/to/neuvector-csp-iam-role.json
+aws iam create-role \
+  --role-name $ROLE_NAME \
+  --assume-role-policy-document file://neuvector-csp-iam-role.json
 ```
 
 ... and the policy attached to it:
 
 ```
-aws iam attach-role-policy --role-name $ROLE_NAME --policy-arn=arn:aws:iam::$AWS_ACCOUNT_ID:policy/$POLICY_NAME
+aws iam attach-role-policy \
+  --role-name $ROLE_NAME \
+  --policy-arn=arn:aws:iam::$AWS_ACCOUNT_ID:policy/$POLICY_NAME
 ```
 
 ## Admin password
 
-Create a file named `userinitcfg.yaml`, with the following template, where:
+Create a file named `userinitcfg.yaml` in your current working directory, with the following template, where:
 
-* `$PASSWORD` is the initial password for the _admin_ account. **It is required to contain at least 8 characters, at least 1 uppercase character, at least 1 lowercase character and at least 1 number.**
+* `$PASSWORD` is the initial password for the _admin_ account.
+
+  **⚠ The password is required to contain at least 8 characters, at least 1 uppercase character, at least 1 lowercase character and at least 1 number.**
 
 ```
 users:
@@ -82,7 +91,8 @@ users:
 Deploy this config to your EKS cluster:
 
 ```
-kubectl create secret generic neuvector-init --from-file=userinitcfg.yaml -n neuvector
+kubectl create secret generic neuvector-init \
+  --from-file=userinitcfg.yaml -n neuvector
 ```
 
 This step is mandatory: the _admin_ user will not be created unless configured with a user-specified password, making the NeuVector deployment unmanageable.
@@ -95,16 +105,19 @@ Log *helm* into the AWS Marketplace ECR, to fetch the application. Note that the
 ```
 export HELM_EXPERIMENTAL_OCI=1
 
-aws --region us-east-1 ecr get-login-password | helm registry login --username AWS --password-stdin 709825985650.dkr.ecr.us-east-1.amazonaws.com
+aws --region us-east-1 ecr get-login-password \
+  | helm registry login --username AWS \
+  --password-stdin 709825985650.dkr.ecr.us-east-1.amazonaws.com
 ```
 
 Install Neuvector into your cluster using *helm*. Customize your helm installation values if needed:
 
 ```
 helm install -n neuvector neuvector --create-namespace \
-oci://709825985650.dkr.ecr.us-east-1.amazonaws.com/suse/{{repository}}/core --version {{chart_version}} \
---set awsbilling.accountNumber=$AWS_ACCOUNT_ID \
---set awsbilling.roleName=$ROLE_NAME
+oci://709825985650.dkr.ecr.us-east-1.amazonaws.com/suse/{{repository}}/core \
+  --version {{chart_version}} \
+  --set awsbilling.accountNumber=$AWS_ACCOUNT_ID \
+  --set awsbilling.roleName=$ROLE_NAME
 ```
 
 ## Log into the NeuVector dashboard
@@ -135,8 +148,11 @@ This URL provides access to the NeuVector console which is running by default on
 The NeuVector scanner image is updated daily with a new CVE database. These updates are found on the NeuVector Docker hub registry. It is recommended that the image path be changed to allow for automated daily updates. This can be accomplished by modifying the scanner and updater image paths after successful deployment:
 
 ```
-kubectl set image  deploy/neuvector-scanner-pod neuvector-scanner-pod=docker.io/neuvector/scanner:latest
-kubectl set image  cronjob/neuvector-updater-pod neuvector-updater-pod=docker.io/neuvector/updater:latest
+kubectl set image deploy/neuvector-scanner-pod \
+  neuvector-scanner-pod=docker.io/neuvector/scanner:latest
+
+kubectl set image  cronjob/neuvector-updater-pod \
+  neuvector-updater-pod=docker.io/neuvector/updater:latest
 ```
 
 ## Navigating the console
