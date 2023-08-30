@@ -1,3 +1,8 @@
+/* only these query params are allowed for substitution */
+const allowed_param_keys = [
+	'chart_version',
+];
+
 /*!
  * Get an object value from a specific path
  * (c) 2018 Chris Ferdinandi, MIT License, https://gomakethings.com
@@ -122,8 +127,6 @@ Let's start the party ...
 */
 document.addEventListener("DOMContentLoaded", function(event) {
 	// Only allow these params
-	const allowed_param_keys = ['chart_version'];
-
   let params = getParams(window.location.href, allowed_param_keys);
   let codeblocks = document.querySelectorAll('pre code');
 
