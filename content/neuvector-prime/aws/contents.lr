@@ -23,7 +23,7 @@ Your EKS cluster is required to have an OIDC provider installed. To check for an
 aws eks describe-cluster --name $CLUSTER_NAME --query cluster.identity.oidc.issuer --output text
 ```
 
-A URL is returned, like `https://oidc.eks.region.amazonaws.com/id/1234567890ABCDEF`. The part after `https://` will be referred to in later instructions as the *OIDC Provider Identity*. The final section of the URL, `1234567890ABCDEF`, is the $OIDC_ID.
+A URL is returned, like `https://oidc.eks.region.amazonaws.com/id/1234567890ABCDEF`. The part after `https://` will be referred to in later instructions as the *OIDC Provider Identity* (e.g. `oidc.eks.region.amazonaws.com/id/1234567890ABCDEF`). The final section of the URL, `1234567890ABCDEF`, is the $OIDC_ID.
 
 Using the id of the issuer found above you can check if a provider is installed with the following command:
 
