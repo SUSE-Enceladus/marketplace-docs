@@ -1,0 +1,4 @@
+[project]
+name = SUSE Marketplace Docs
+url = https://suse-enceladus.github.io/marketplace-docs
+locale = en_US

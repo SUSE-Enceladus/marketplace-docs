@@ -1,0 +1,46 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="{{ this.title }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ bag('lektorproject.project.url') }}">
+  <meta property="og:image" content="https://www.suse.com/assets/img/suse-social-platforms-image.png">
+  <meta name="theme-color" content="#fafafa">
+  <!-- Place favicon.ico in the root directory -->
+
+  <link rel="stylesheet" href="{{ '/css/normalize.css'|asseturl }}">
+  <link rel="stylesheet" href="{{ '/css/grd.min.css'|asseturl }}">
+  <link rel="stylesheet" href="{{ '/css/main.css'|asseturl }}">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Roboto+Mono&display=swap');
+  </style>
+  <link rel="stylesheet" href="{{ '/css/application.css'|asseturl }}">
+</head>
+<body class="{{ this.theme }}">
+  <div class="container">
+    <div class="Grid -center">
+      <div class="Cell -12of12">
+        <header>
+          <h1>{{ this.title }}</h1>
+        </header>
+      </div>
+      <div class="Cell -12of12">
+        {% block body %}{% endblock %}
+      </div>
+      <div class="Cell -12of12">
+        <footer>
+          Copyright &copy; 2023 SUSE LLC.
+        </footer>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="{{ '/js/modernizr-3.11.2.min.js'|asseturl }}"></script>
+<script src="{{ '/js/plugins.js'|asseturl }}"></script>
+<script src="{{ '/js/application.js'|asseturl }}"></script>
+</html>

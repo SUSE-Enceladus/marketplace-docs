@@ -1,0 +1,64 @@
+:root {
+  /* SUSE colors
+   * https://brand.suse.com/brand-system/color-palette
+   */
+  --pine-green: #0c322c;
+  --jungle-green: #30ba78;
+  --midnight-blue: #192072;
+  --waterhole-blue: #2453ff;
+  --mint: #90ebcd;
+  --persimmon: #fe7c3f;
+  --fog: #efefef;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+h1 {
+  font-weight: 500;
+}
+
+h2,h3,h4,h5,h6 {
+  font-weight: 300;
+}
+
+.suse h1 {
+  color: var(--pine-green);
+}
+
+.suse h2,.suse h3,.suse h4,.suse h5,.suse h6 {
+  color: var(--jungle-green);
+}
+
+.rancher h1 {
+  color: var(--midnight-blue);
+}
+
+.rancher h2,.rancher h3,.rancher h4,.rancher h5,.rancher h6 {
+  color: var(--waterhole-blue);
+}
+
+pre {
+  font-family: 'Roboto Mono', monospace;
+  padding: 1em 0.5em;
+  overflow: scroll;
+  background-color: var(--fog);
+  border-radius: 0.5em;
+}
+
+.suse a {
+  color: var(--jungle-green);
+}
+
+.container {
+  margin: auto;
+  padding: 16px;
+  max-width: 960px;
+}
+
+footer {
+  margin-top: 1em;
+  border-top: 1px solid var(--fog);
+  padding-top: 0.25em;
+}

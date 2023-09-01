@@ -1,0 +1,19 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    James Mason -- web author -- jmason@suse.com
+
+# THANKS
+
+    Nathan Carnes for the idea.
+
+# TECHNOLOGY COLOPHON
+
+    CSS3, HTML5
+    https://html5boilerplate.com/
+    https://1000ch.github.io/grd/
+    https://vanillajstoolkit.com/
+
+Copyright (c) 2023 SUSE LLC
