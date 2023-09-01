@@ -17,7 +17,7 @@ body:
 
 ### OIDC provider
 
-Your EKS cluster is required to have an OIDC provider installed. To check for an OIDC provider first find the OIDC issuer with the following command. Substitute `$CLUSTER_NAME` with the *Name* of the EKS cluster:
+Your EKS cluster is required to have an OIDC provider installed. To check for an OIDC provider first find the OIDC issuer with the following command. Substitute `$CLUSTER_NAME` with the *Name* of your EKS cluster:
 
 ```
 aws eks describe-cluster --name $CLUSTER_NAME --query cluster.identity.oidc.issuer --output text
