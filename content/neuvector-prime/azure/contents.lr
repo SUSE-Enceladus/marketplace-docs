@@ -19,10 +19,10 @@ A step by step walk-through for creating a new offer from the Marketplace Overvi
    Yes option
    Choose Region
 
-   ![alt text](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/basic.png?raw=true)
+   ![basic picture](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/basic.png "Basic Project details screen")
 
    click 'Next'
-     ### Cluster Details
+     ### Cluster Details for New cluster
 
      1. Choose AKS Cluster Name
      2. Choose Kubernetes Version from the dropdown list
@@ -30,18 +30,18 @@ A step by step walk-through for creating a new offer from the Marketplace Overvi
      4. Enable auto scaling    
      5. Slide the bar to choose Virtual Machine count
      
-     ![alt text](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/clusterdetailsyes.png?raw=true)
+     ![Cluster picture](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/clusterdetailsyes.png "Cluster screen")
 
 
 
    No option
   
    click 'Next'
-     ## Cluster Details
+     ## Cluster Details for Existing cluster
   
      1. Choose AKS Cluster Name from the dropdown list
 
-     ![alt text](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/clusterdetailsno.png?raw=true)
+     ![Cluster picture](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/clusterdetailsno.png "Cluster screen")
 
    click 'Next'
 ## Application Details
@@ -50,7 +50,7 @@ A step by step walk-through for creating a new offer from the Marketplace Overvi
 2. Choose name for Application Title 
 
 
-![alt text](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/application_details.png?raw=true)
+![Application picture](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/application_details.png "Application screen")
 click 'Next'
 ## Neuvector Configuration
 
@@ -124,5 +124,5 @@ Once logged in, you can begin to [navigate and configure NeuVector](https://open
 
 ## More information
 
-For further information see the [AWS Marketplace Billing doc](https://open-docs.neuvector.com/deploying/awsmarketplace) and [official Neuvector documentation](https://open-docs.neuvector.com/).
+For further information see the [Azure Marketplace Billing doc] and [official Neuvector documentation](https://open-docs.neuvector.com/).
 ~                           
