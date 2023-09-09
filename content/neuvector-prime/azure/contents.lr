@@ -76,31 +76,47 @@ Application Details:
 
 Neuvector Configuration:
 
-## Expected resource created by offer 
 
+
+## Deployment Complete 
+
+Deployment will be in progress. After it is completed, the following resource are created
+
+1. AKS Cluster 
+2. Kubernetes Service Extension
+
+click 'Go to Resource group'
+click AKS cluster (created by offer)
+
+click 'Connect' Follow Cloud Shell instructions to Set cluster context
+  1. Set the cluster subscription
+  2. Download cluster credentials
 
 ## Log into the NeuVector dashboard
 
-The manager service type was set to Load Balancer during install. An external hostname has been assigned for accessing the NeuVector console. By default this URL is accessible from the internet. However, your organization may have placed additional restrictions on external access to your cluster. To retrieve details about the load balancer use the following command:
+The manager service type was set to Load Balancer during install. An external hostname has been assigned for accessing the NeuVector console. By default this URL is accessible from the internet. However, your organization may have placed additional restrictions on external access to your cluster. To retrieve details about the load balancer execute the following command in Cloud Shell:
 
 ```
+
+
 kubectl get svc -n neuvector neuvector-service-webui
 ```
 
 The full dashboard url can be retrieved with the following commands:
 
 ```
-SERVICE_IP=$(kubectl get svc --namespace neuvector neuvector-service-webui -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
+SERVICE_IP=$(kubectl get svc --namespace neuvector neuvector-service-webui -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
 echo https://$SERVICE_IP:8443
 ```
 
-This will print out a URL that looks like:
+This will print out a URL that looks like: 
 
 ```
-https://
+https://<ipaddress>:8443
 ```
 
-This URL provides access to the NeuVector console which is running by default on port 8443.
+This URL provides access to the NeuVector console which is running by default on port 8443. Open a browser window, paste the URL.
+The Neuvector login will appear, login with the credential which you have set during offer creation for admin user.
 
 ## Neuvector Usage Record 
 
