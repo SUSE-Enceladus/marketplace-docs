@@ -4,12 +4,14 @@ theme: suse
 ---
 body:
 
-##  How to install NeuVector and configure illing-adapter.
+##  How to install NeuVector and configure Billing-adapter.
 
 A step by step walk-through for creating a new offer from the Marketplace Overview page.
 
 1. Choose the plan from the dropdown list. ( "Plans + Pricing" tab more details about Software plan)
 2. Click 'Create' 
+
+![create picture](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/create_offer.png "Create offer screen")
 
 ## Basic (Project Details)
 
