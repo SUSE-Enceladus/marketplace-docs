@@ -18,34 +18,38 @@ A step by step walk-through for creating a new offer from the Marketplace Overvi
 1. Select existing subscription from the dropdown list. 
 2. Select existing Resource group from the dropdown list or create new. Provide name for new Resource group. 
 3. Choose New cluster [ Yes/No ] option. 
-   Yes option
-   Choose Region
+
+   'Yes' option, Choose Region
 
    ![basic picture](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/basic.png "Basic Project details screen")
 
    click 'Next'
-     ### Cluster Details for New cluster
 
-     1. Choose AKS Cluster Name
-     2. Choose Kubernetes Version from the dropdown list
-     3. Choose VM size
-     4. Enable auto scaling    
-     5. Slide the bar to choose Virtual Machine count
+       ### Cluster Details for New cluster
+
+       1. Choose AKS Cluster Name
+       2. Choose Kubernetes Version from the dropdown list
+       3. Choose VM size
+       4. Enable auto scaling
+       5. Slide the bar to choose Virtual Machine count
      
-     ![Cluster picture](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/clusterdetailsyes.png "Cluster screen")
+   ![Cluster picture](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/clusterdetailsyes.png "Cluster screen")
 
 
 
-   No option
+   'No' option
   
    click 'Next'
-     ## Cluster Details for Existing cluster
-  
-     1. Choose AKS Cluster Name from the dropdown list
 
-     ![Cluster picture](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/clusterdetailsno.png "Cluster screen")
+       ## Cluster Details for Existing cluster
+
+  
+       1. Choose AKS Cluster Name from the dropdown list
+
+   ![Cluster picture](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/clusterdetailsno.png "Cluster screen")
 
    click 'Next'
+
 ## Application Details
 
 1. Choose name for Cluster extension resource name
@@ -53,7 +57,9 @@ A step by step walk-through for creating a new offer from the Marketplace Overvi
 
 
 ![Application picture](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/application_details.png "Application screen")
+
 click 'Next'
+
 ## Neuvector Configuration
 
 1. Choose Admin password 
@@ -126,5 +132,5 @@ Once logged in, you can begin to [navigate and configure NeuVector](https://open
 
 ## More information
 
-For further information see the [Azure Marketplace Billing doc] and [official Neuvector documentation](https://open-docs.neuvector.com/).
+For further information see the [Azure Marketplace Billing doc](https://open-docs.neuvector.com/deploying) and [official Neuvector documentation](https://open-docs.neuvector.com/).
 ~                           
