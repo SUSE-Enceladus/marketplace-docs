@@ -41,16 +41,7 @@ This will return the OIDC provider's ARN, with the ID at the end.
 
 ### IAM Role
 
-To provide the necessary permissions, an IAM policy and an attached role are required. The role is passed as an argument during the *helm* deployment. Download [`neuvector-csp-iam-policy.json`](./neuvector-csp-iam-policy.json) to locally inspect the policy. Create the policy with a *policy name* of your choosing:
-
-```
-curl https://suse-enceladus.github.io/marketplace-docs/neuvector-prime/aws/neuvector-csp-iam-policy.json \
-  > neuvector-csp-iam-policy.json
-
-aws iam create-policy \
-  --policy-name $POLICY_NAME \
-  --policy-document file://neuvector-csp-iam-policy.json
-```
+To provide the necessary permissions, an IAM role and an attached policy are required. The role is passed as an argument during the *helm* deployment.
 
 Download [`neuvector-csp-iam-role.json`](./neuvector-csp-iam-role.json) to your current working directory. Edit the document, where:
 
@@ -70,7 +61,7 @@ aws iam create-role \
 ```
 aws iam attach-role-policy \
   --role-name $ROLE_NAME \
-  --policy-arn=arn:aws:iam::$AWS_ACCOUNT_ID:policy/$POLICY_NAME
+  --policy-arn=arn:aws:iam::aws:policy/AWSMarketplaceMeteringFullAccess
 ```
 
 ## Admin password
@@ -91,6 +82,7 @@ users:
 Deploy this config to your EKS cluster:
 
 ```
+kubectl create namespace neuvector
 kubectl create secret generic neuvector-init \
   --from-file=userinitcfg.yaml -n neuvector
 ```
