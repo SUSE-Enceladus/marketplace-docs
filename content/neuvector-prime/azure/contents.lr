@@ -120,7 +120,35 @@ The Neuvector login will appear, login with the credential which you have set du
 
 Once logged in, you can begin to [navigate and configure NeuVector](https://open-docs.neuvector.com/navigation/navigation).
 
-## Neuvector Usage Record 
+## Neuvector Usage Record and Billing 
+
+This command will print out CSP Adapter Usage Record:
+
+```
+kubectl get CspAdapterUsageRecord  neuvector-usage -nneuvector -oyaml
+```
+
+Output will looks like:
+
+```
+kubectl get CspAdapterUsageRecord  neuvector-usage -nneuvector -oyaml
+apiVersion: susecloud.net/v1
+base_product: cpe:/o:suse:neuvector:5.2.0
+kind: CspAdapterUsageRecord
+managed_node_count: 1
+metadata:
+  creationTimestamp: "2023-09-12T16:29:56Z"
+  generation: 3
+  name: neuvector-usage
+  resourceVersion: "2057534"
+  uid: e12a5890-b97e-4fef-9373-242ccce0a14c
+reporting_time: "2023-09-12T16:32:27.012177+00:00"
+```
+
+Billing will be available in Azure Portal billing
+
+Home > Cost Management <subscription> | Cost analysis
+
 
 ## More information
 
