@@ -1,10 +1,10 @@
-title: NeuVector in Azure: Usage Instructions
+title: NeuVector Prime in Azure: Usage Instructions
 ---
 theme: suse
 ---
 body:
 
-##  How to install NeuVector and configure illing-adapter.
+##  How to install NeuVector and configure Billing-adapter.
 
 A step by step walk-through for creating a new offer from the Marketplace Overview page.
 
@@ -13,16 +13,29 @@ A step by step walk-through for creating a new offer from the Marketplace Overvi
 
 ## Basic (Project Details)
 
-1. Select existing subscription from the dropdown list. 
-2. Select existing Resource group from the dropdown list or create new. Provide name for new Resource group. 
+1. Select existing subscription from the dropdown list.
+2. Select existing Resource group from the dropdown list or create new Resource group.
+
+   Existing Resource Group selection:
+
+   <img src="/images/neuvector-prime/azure/existingresourcegroup.png" alt="Existing ResourceGroup" width="800"/>
+
+   Create New Resource group:
+   Provide name for new Resource group.
+
+   <img src="/images/neuvector-prime/azure/newresourcegroup.png" alt="New ResourceGroup" width="800"/>
+
 3. Choose New cluster [ Yes/No ] option. 
+
    Yes option
+
    Choose Region
 
-   ![alt text](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/basic.png?raw=true)
+   <img src="/images/neuvector-prime/azure/createclusteryes.png" alt="Create Cluster" width="800"/>
 
    click 'Next'
-     ### Cluster Details
+
+    Cluster Details:
 
      1. Choose AKS Cluster Name
      2. Choose Kubernetes Version from the dropdown list
@@ -30,27 +43,32 @@ A step by step walk-through for creating a new offer from the Marketplace Overvi
      4. Enable auto scaling    
      5. Slide the bar to choose Virtual Machine count
      
-     ![alt text](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/clusterdetailsyes.png?raw=true)
+     <img src="/images/neuvector-prime/azure/clusterdetailsyes.png" alt="Cluster Details" width="800"/>
 
 
 
    No option
   
    click 'Next'
-     ## Cluster Details
-  
-     1. Choose AKS Cluster Name from the dropdown list
 
-     ![alt text](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/clusterdetailsno.png?raw=true)
+   Cluster Details:
+
+   Choose AKS Cluster name from dropdown list
+
+   <img src="/images/neuvector-prime/azure/clusterdetailsno.png" alt="Create Cluster" width="800"/>
+
+
+
 
    click 'Next'
+
 ## Application Details
 
 1. Choose name for Cluster extension resource name
 2. Choose name for Application Title 
 
 
-![alt text](https://github.com/SUSE-Enceladus/marketplace-docs/tree/main/content/neuvector-prime/azure/images/application_details.png?raw=true)
+<img src="/images/neuvector-prime/azure/application_details.png" alt="Application Details" width="800"/>
 click 'Next'
 ## Neuvector Configuration
 
@@ -149,8 +167,91 @@ Billing will be available in Azure Portal billing
 
 Home > Cost Management <subscription> | Cost analysis
 
+## Troubleshooting
+
+This section contains information to help you troubleshoot issues when install Neuvector and configure Billing-adapter
+
+After successful deployment, it should list similar pod and chart output 
+
+```
+kubectl get deployments --all-namespaces=true
+```
+
+```
+NAMESPACE     NAME                                                      READY   UP-TO-DATE   AVAILABLE   AGE
+kube-system   addon-http-application-routing-external-dns               1/1     1            1           19m
+kube-system   addon-http-application-routing-nginx-ingress-controller   1/1     1            1           19m
+kube-system   coredns                                                   2/2     2            2           19m
+kube-system   coredns-autoscaler                                        1/1     1            1           19m
+kube-system   extension-agent                                           1/1     1            1           16m
+kube-system   extension-operator                                        1/1     1            1           16m
+kube-system   konnectivity-agent                                        2/2     2            2           19m
+kube-system   metrics-server                                            2/2     2            2           19m
+neuvector     neuvector-controller-pod                                  3/3     3            3           15m
+neuvector     neuvector-csp-pod                                         1/1     1            1           15m
+neuvector     neuvector-manager-pod                                     1/1     1            1           15m
+neuvector     neuvector-scanner-pod                                     3/3     3            3           15m
+```
+
+```
+helm list -n neuvector
+NAME         	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART     	APP VERSION
+testextension	neuvector	4       	2023-09-13 15:39:03.266748698 +0000 UTC	deployed	core-2.6.1	5.2.0 
+```
+
+Jobs and Pods:
+
+Check that pods or jobs have status Running/Completed
+
+
+```
+kubectl get pods --all-namespaces
+```
+
+
+if a pod is not in Running state, you can dig into the root cause by running:
+      
+Describe pod
+
+
+```
+kubectl describe pod <pod name> -n <namespaces>
+```
+
+Pod container logs
+
+
+```
+kubectl logs <pod name> -n <namespaces>
+```
+
+Describe job
+
+
+```
+kubectl describe job <job name> -n <namespaces>
+```
+
+Logs from the containers of pods of the job
+
+```
+kubectl logs -l job-name=<job name> -n <namespaces>
+```
+
+Troubleshooting Neuvector Usage Record: 
+
+
+Error from server (NotFound): cspadapterusagerecords.susecloud.net "neuvector-usage" not found
+ Check Configuration, Retrieve generated configuration csp-config
+    
+
+```
+kubectl get cm -n neuvector csp-config -oyaml
+```
+
+if a configuration is not listed, you can dig into the root cause by checking the pod status and log (Refer Jobs and Pods section).
 
 ## More information
 
-For further information see the [Azure Marketplace Billing doc] and [official Neuvector documentation](https://open-docs.neuvector.com/).
-~                           
+For further information see the [Azure Marketplace Billing doc](Insert link) and [official Neuvector documentation](https://open-docs.neuvector.com/).
+
