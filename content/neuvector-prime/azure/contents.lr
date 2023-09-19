@@ -18,12 +18,12 @@ A step by step walk-through for creating a new offer from the Marketplace Overvi
 
    Existing Resource Group selection:
 
-   <img src="/images/neuvector-prime/azure/existingresourcegroup.png" alt="Existing ResourceGroup" width="800"/>
+   !["Existng Resource Group"](./existingrgclean.png)
 
    Create New Resource group:
    Provide name for new Resource group.
 
-   <img src="/images/neuvector-prime/azure/newresourcegroup.png" alt="New ResourceGroup" width="800"/>
+   !["New Resource Group"](./newresourcegroupclean.png)
 
 3. Choose New cluster [ Yes/No ] option. 
 
@@ -31,7 +31,7 @@ A step by step walk-through for creating a new offer from the Marketplace Overvi
 
    Choose Region
 
-   <img src="/images/neuvector-prime/azure/createclusteryes.png" alt="Create Cluster" width="800"/>
+   !["Create Cluster"](./createclusteryesclean.png)
 
    click 'Next'
 
@@ -43,7 +43,7 @@ A step by step walk-through for creating a new offer from the Marketplace Overvi
      4. Enable auto scaling    
      5. Slide the bar to choose Virtual Machine count
      
-     <img src="/images/neuvector-prime/azure/clusterdetailsyes.png" alt="Cluster Details" width="800"/>
+     !["Cluster Details"](./clusterdetailsyes.png)
 
 
 
@@ -55,7 +55,7 @@ A step by step walk-through for creating a new offer from the Marketplace Overvi
 
    Choose AKS Cluster name from dropdown list
 
-   <img src="/images/neuvector-prime/azure/clusterdetailsno.png" alt="Create Cluster" width="800"/>
+   !["Create Cluster"](./clusterdetailsno.png)
 
 
 
@@ -68,7 +68,8 @@ A step by step walk-through for creating a new offer from the Marketplace Overvi
 2. Choose name for Application Title 
 
 
-<img src="/images/neuvector-prime/azure/application_details.png" alt="Application Details" width="800"/>
+!["Application Details"](./application_details.png)
+
 click 'Next'
 ## Neuvector Configuration
 
@@ -128,7 +129,7 @@ echo https://$SERVICE_IP:8443
 This will print out a URL that looks like: 
 
 ```
-https://<ipaddress>:8443
+https://10.20.10.1:8443
 ```
 
 This URL provides access to the NeuVector console which is running by default on port 8443. Open a browser window, paste the URL.
