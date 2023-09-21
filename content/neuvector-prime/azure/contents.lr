@@ -11,89 +11,54 @@ A step by step walk-through for creating a new offer from the Marketplace Overvi
 1. Choose the plan from the dropdown list. ( "Plans + Pricing" tab more details about Software plan)
 2. Click 'Create' 
 
-## Basic (Project Details)
+## Basics
 
 1. Select existing subscription from the dropdown list.
-2. Select existing Resource group from the dropdown list or create new Resource group.
+2. Select existing Resource group from the dropdown list.
+3. Select existing AKS Cluster Name from the dropdown list.
+4. Choose name for Cluster extension resource name as it suggested by the 
+   tool tip "Allow alphanumeric, and dots. And the value must be 1-253 characters long". 
 
-   Existing Resource Group selection:
 
-   !["Existng Resource Group"](./existingrgclean.png)
-
-   Create New Resource group:
-   Provide name for new Resource group.
-
-   !["New Resource Group"](./newresourcegroupclean.png)
-
-3. Choose New cluster [ Yes/No ] option. 
-
-   Yes option
-
-   Choose Region
-
-   !["Create Cluster"](./createclusteryesclean.png)
-
-   click 'Next'
-
-    Cluster Details:
-
-     1. Choose AKS Cluster Name
-     2. Choose Kubernetes Version from the dropdown list
-     3. Choose VM size
-     4. Enable auto scaling    
-     5. Slide the bar to choose Virtual Machine count
-     
-     !["Cluster Details"](./clusterdetailsyes.png)
+   !["Existng Resource Group"](./basiccluster.png)
 
 
 
-   No option
-  
-   click 'Next'
 
-   Cluster Details:
+   ```
+   Note: The create new Resource group feature is not supported 
+   ```
 
-   Choose AKS Cluster name from dropdown list
 
-   !["Create Cluster"](./clusterdetailsno.png)
 
+   !["New Resource Group"](./newclusternosupport.png)
 
 
 
    click 'Next'
 
-## Application Details
-
-1. Choose name for Cluster extension resource name
-2. Choose name for Application Title 
 
 
-!["Application Details"](./application_details.png)
-
-click 'Next'
 ## Neuvector Configuration
 
-1. Choose Admin password 
-2. Confirm Admin password 
+
+1. Choose Admin password as it suggested by the tip
+
+
+!["Application Details"](./adminpassword.png)
+
 
 click 'Next'
 
 ## Review + create
 
-It will summarize the offer and also view automation template 
 
-Price:
-  Plan 
-  Price 
-  Terms
+  It will summarize the offer and link to "view automation template" (Azure Resource Manager Template) 
 
-Basics:
 
-Cluster Details:
-
-Application Details:
-
-Neuvector Configuration:
+     Price
+     Basics
+     Neuvector Configuration
 
 click 'Create'
 
@@ -168,6 +133,31 @@ Billing will be available in Azure Portal billing
 
 Home > Cost Management <subscription> | Cost analysis
 
+
+
+## Upgrading a NeuVector PAYG Cluster
+
+The Azure marketplace PAYG offer is tied to a billing adapter AND Neuvector version. These are updated periodically as new version of the billing adapter or NeuVector are released. To update the NeuVector version to the latest version supported by the marketplace listing, use the "az k8s-extension update" command.
+
+Execute the following command in Cluster Cloud Shell:
+
+```
+az k8s-extension update  --name <cluster extension resource name>   --cluster-name <cluster name> --resource-group <resource group> --cluster-type managedClusters --version <version to be upgraded>
+```
+
+
+In Azure Console, Cluster > Extensions + applications screen "Provisioning State" should be in "Updating" state.
+
+
+
+
+   !["Upgrade"](./upgradeinprogress.png)
+
+
+
+
+
+
 ## Troubleshooting
 
 This section contains information to help you troubleshoot issues when install Neuvector and configure Billing-adapter
@@ -194,11 +184,6 @@ neuvector     neuvector-manager-pod                                     1/1     
 neuvector     neuvector-scanner-pod                                     3/3     3            3           15m
 ```
 
-```
-helm list -n neuvector
-NAME         	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART     	APP VERSION
-testextension	neuvector	4       	2023-09-13 15:39:03.266748698 +0000 UTC	deployed	core-2.6.1	5.2.0 
-```
 
 Jobs and Pods:
 
@@ -239,20 +224,59 @@ Logs from the containers of pods of the job
 kubectl logs -l job-name=<job name> -n <namespaces>
 ```
 
-Troubleshooting Neuvector Usage Record: 
 
+###Neuvector Usage Record Not found: 
 
-Error from server (NotFound): cspadapterusagerecords.susecloud.net "neuvector-usage" not found
+Error:
+
+```
+Error from server (NotFound): cspadapterusagerecords.susecloud.net "neuvector-usage" not found"
  Check Configuration, Retrieve generated configuration csp-config
+```
     
+
+Solution:
 
 ```
 kubectl get cm -n neuvector csp-config -oyaml
 ```
 
+
 if a configuration is not listed, you can dig into the root cause by checking the pod status and log (Refer Jobs and Pods section).
+
+
+###Multiple extensions of same type: 
+
+Error:
+
+```
+Multiple extensions of same type is not allowed at this scope. (Code: ValidationFailed)"
+```
+
+Solution:
+
+AKS cluster already has the extension with the same type. Uninstall the extension and re-deploy with the same cluster.
+
+   !["Uninstall extension"](./uninstall.png)
+
+###Resource already existing in your cluster: 
+
+Error:
+
+```
+Helm installation failed : Resource already existing in your cluster : Recommendation Manually delete the resource(s) that currently exist in your cluster and try installation again. To delete these resources run the following commands: kubectl delete <resource type> -n <resource namespace> <resource name> : InnerError [rendered manifests contain a resource that already exists. Unable to continue with install: ServiceAccount "csp" in namespace "neuvector" exists and cannot be imported into the current release: invalid ownership metadata; annotation validation error: key "meta.helm.sh/release-name" must equal "test-nv2-reinstall": current value is "testnv2-plan"]
+```
+
+Solution:
+
+AKS cluster already has the extension. Uninstall the extension as it suggested in the Error by deleting the resource via the kubectl command. or Uninstall the extension in Azure Console and re-deploy with the same cluster. 
+
+   
+   !["Uninstall extension"](./uninstall.png)
+
+
 
 ## More information
 
-For further information see the [Azure Marketplace Billing doc](Insert link) and [official Neuvector documentation](https://open-docs.neuvector.com/).
+For further information see the [Azure Marketplace Billing doc](https://open-docs.neuvector.com/deploying/azuremarketplace) and [official Neuvector documentation](https://open-docs.neuvector.com/).
 
