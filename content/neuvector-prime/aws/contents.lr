@@ -37,8 +37,6 @@ If there is no output, you will need to create an OIDC provider:
 eksctl utils associate-iam-oidc-provider --cluster $CLUSTER_NAME --approve
 ```
 
-This will return the OIDC provider's ARN, with the ID at the end.
-
 ### IAM Role
 
 To provide the necessary permissions, an IAM role and an attached policy are required. The role name is passed as an argument during the *helm* deployment.
