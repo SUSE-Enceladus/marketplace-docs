@@ -41,27 +41,16 @@ This will return the OIDC provider's ARN, with the ID at the end.
 
 ### IAM Role
 
-To provide the necessary permissions, an IAM role and an attached policy are required. The role is passed as an argument during the *helm* deployment.
+To provide the necessary permissions, an IAM role and an attached policy are required. The role name is passed as an argument during the *helm* deployment.
 
-Download [`neuvector-csp-iam-role.json`](./neuvector-csp-iam-role.json) to your current working directory. Edit the document, where:
-
-* `$AWS_ACCOUNT_ID` is your 12-digit AWS account ID (no-dashes)
-* `$OIDC_PROVIDER_IDENTITY` is the *OIDC Provider Identity*
-
-The role can then be created with a *role name* of your choosing:
+Create the role with a *role name* of your choosing (for example, `neuvector-csp-iam-role`), and the required policy attached to it:
 
 ```
-aws iam create-role \
-  --role-name $ROLE_NAME \
-  --assume-role-policy-document file://neuvector-csp-iam-role.json
-```
-
-... and the policy attached to it:
-
-```
-aws iam attach-role-policy \
-  --role-name $ROLE_NAME \
-  --policy-arn=arn:aws:iam::aws:policy/AWSMarketplaceMeteringFullAccess
+eksctl create iamserviceaccount \
+  --namespace neuvector --cluster $CLUSTER_NAME \
+  --role-name $ROLE_NAME --role-only \
+  --attach-policy-arn 'arn:aws:iam::aws:policy/AWSMarketplaceMeteringFullAccess' \
+  --approve
 ```
 
 ## Admin password
