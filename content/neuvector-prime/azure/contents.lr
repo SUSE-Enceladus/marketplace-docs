@@ -39,7 +39,7 @@ A step by step walk-through for creating a new offer from the Marketplace Overvi
 
 
 
-## Neuvector Configuration
+## NeuVector Configuration
 
 
 1. Choose Admin password as it suggested by the tip
@@ -58,7 +58,7 @@ click 'Next'
 
      Price
      Basics
-     Neuvector Configuration
+     NeuVector Configuration
 
 click 'Create'
 
@@ -76,7 +76,7 @@ click 'Connect' Follow Cloud Shell instructions to Set cluster context
   1. Set the cluster subscription
   2. Download cluster credentials
 
-## Log into the NeuVector dashboard
+## Log into the NeuVector console
 
 The manager service type was set to Load Balancer during install. An external hostname has been assigned for accessing the NeuVector console. By default this URL is accessible from the internet. However, your organization may have placed additional restrictions on external access to your cluster. To retrieve details about the load balancer execute the following command in Cloud Shell:
 
@@ -98,13 +98,69 @@ https://10.20.10.1:8443
 ```
 
 This URL provides access to the NeuVector console which is running by default on port 8443. Open a browser window, paste the URL.
-The Neuvector login will appear, login with the credential which you have set during offer creation for admin user.
+The NeuVector login will appear, login with the credential which you have set during offer creation for admin user.
 
 ## Navigating the console
 
 Once logged in, you can begin to [navigate and configure NeuVector](https://open-docs.neuvector.com/navigation/navigation).
 
-## Neuvector Usage Record and Billing 
+
+
+```
+Important! The current NeuVector deployment exposes the original password in the Cluster 
+           configuration settings. Until this is resolved, it is suggested to change the
+           Admin password after initial login.  Edit profile in the NeuVector console
+           to change password. 
+
+```
+
+
+1. Access NeuVector Console as a admin user
+2. Click Admin user dropdown and click My Profile
+3. Click Edit Profile and set New password and Update Profile.
+
+
+
+
+
+
+   !["Change Admin Password"](./changepwd.png)
+
+
+
+
+
+
+
+
+```
+Important! Do not change or save the cluster configuration settings for Fullname, Password,
+           or Role by changing the key value pairs :
+
+                    "controller.secret.data.userinitcfg\\.yaml.users[0].Fullname"
+                    "controller.secret.data.userinitcfg\\.yaml.users[0].Password"
+                    "controller.secret.data.userinitcfg\\.yaml.users[0].Role"
+
+           Changing this value does not update the NeuVector Admin Fullname, Password, 
+           or Role. This will cause unnecessary cluster restarts.
+
+```
+
+
+
+
+
+
+
+   !["Keyvaluepair config"](./keyvaluepairconfig.png)
+
+
+
+
+
+
+
+## NeuVector Usage Record and Billing 
 
 This command will print out CSP Adapter Usage Record:
 
@@ -137,13 +193,31 @@ Home > Cost Management <subscription> | Cost analysis
 
 ## Upgrading a NeuVector PAYG Cluster
 
-The Azure marketplace PAYG offer is tied to a billing adapter AND Neuvector version. These are updated periodically as new version of the billing adapter or NeuVector are released. To update the NeuVector version to the latest version supported by the marketplace listing, use the "az k8s-extension update" command.
+The Azure marketplace PAYG offer is periodically updated as a new versions of NeuVector are released, and for optimizations in the integration with Azure. To update the latest version of the NeuVector PAYG offering supported in the marketplace listing, use the "az k8s-extension update" command.
+
+As a Prerequisites to create extension instances in AKS cluster,  Register Azure Feature
 
 Execute the following command in Cluster Cloud Shell:
 
 ```
+# Set your subscription.
+az account set --subscription <your-subId>
+
+# Register for preview features.
+az feature register --namespace Microsoft.KubernetesConfiguration --name extensionTypes
+
+# To check the state is registered
+
+az feature list -o table --query "[?contains(name, 'Microsoft.ContainerService/Microsoft.KubernetesConfiguration')].{Name:name,State:properties.state}"
+
+# Execute update command after the feature is registered.  
 az k8s-extension update  --name <cluster extension resource name>   --cluster-name <cluster name> --resource-group <resource group> --cluster-type managedClusters --version <version to be upgraded>
+
+# Update Example (Refer screenshot) 
+az k8s-extension update  --name testnv2-plan --cluster-name testnv2 --resource-group testnv-res-grp --cluster-type managedClusters --version 1.0.51
+
 ```
+
 
 
 In Azure Console, Cluster > Extensions + applications screen "Provisioning State" should be in "Updating" state.
@@ -160,7 +234,7 @@ In Azure Console, Cluster > Extensions + applications screen "Provisioning State
 
 ## Troubleshooting
 
-This section contains information to help you troubleshoot issues when install Neuvector and configure Billing-adapter
+This section contains information to help you troubleshoot issues when install NeuVector and configure Billing-adapter
 
 After successful deployment, it should list similar pod and chart output 
 
@@ -225,7 +299,7 @@ kubectl logs -l job-name=<job name> -n <namespaces>
 ```
 
 
-###Neuvector Usage Record Not found: 
+###NeuVector Usage Record Not found: 
 
 Error:
 
@@ -278,5 +352,5 @@ AKS cluster already has the extension. Uninstall the extension as it suggested i
 
 ## More information
 
-For further information see the [Azure Marketplace Billing doc](https://open-docs.neuvector.com/deploying/azuremarketplace) and [official Neuvector documentation](https://open-docs.neuvector.com/).
+For further information see the [Azure Marketplace Billing doc](https://open-docs.neuvector.com/deploying/azuremarketplace) and [official NeuVector documentation](https://open-docs.neuvector.com/).
 
