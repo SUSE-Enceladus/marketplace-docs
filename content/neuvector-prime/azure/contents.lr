@@ -123,6 +123,7 @@ Once logged in, you can begin to [navigate and configure NeuVector]. Refer (http
     configuration settings. Until this is resolved, it is suggested to change the
     Admin password after initial login.  Edit profile in the NeuVector console
     to change password.
+
     ---
 
 
@@ -157,6 +158,7 @@ Once logged in, you can begin to [navigate and configure NeuVector]. Refer (http
 
     Changing this value does not update the NeuVector Admin Fullname, Password,
     or Role. This will cause unnecessary cluster restarts.
+
     ---
 
 
@@ -193,13 +195,13 @@ Click "Refresh" in the Extension + application screen to view the latest Version
 This command will print out CSP Adapter Usage Record:
 
 ```
-kubectl get CspAdapterUsageRecord  neuvector-usage -nneuvector -oyaml
+kubectl get CspAdapterUsageRecord  neuvector-usage -n neuvector -oyaml
 ```
 
 Output will looks like:
 
 ```
-kubectl get CspAdapterUsageRecord  neuvector-usage -nneuvector -oyaml
+kubectl get CspAdapterUsageRecord  neuvector-usage -n neuvector -oyaml
 apiVersion: susecloud.net/v1
 base_product: cpe:/o:suse:neuvector:5.2.0
 kind: CspAdapterUsageRecord
@@ -336,8 +338,8 @@ AKS cluster already has the extension. Uninstall the extension as it suggested i
 
 ### To check Kubernetes Service Extension version is latest:
 
-With Auto upgrade minor version" enabled, the deployment should always be on the latest version. To see the most recent published versions,
-Execute the following command in Cloud Shell
+With "Auto upgrade minor version" property enabled, the deployment should always be on the latest version. To see the most recent published versions,
+Execute the following command in Cloud Shell.
 
 ```
 az k8s-extension extension-types list-versions --extension-type <extension type> -l <location name>
