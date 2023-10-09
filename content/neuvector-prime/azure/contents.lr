@@ -6,6 +6,14 @@ body:
 
 ##  How to install NeuVector and configure Billing-adapter.
 
+The NeuVector offer handles billing by gathering usage data from NeuVector. For complete installation, Ensure to follow all the steps
+till NeuVector Usage Record and Billing.
+
+##Prerequisites
+
+These instructions assume you have an AKS cluster installed.
+
+
 A step by step walk-through for creating a new offer from the Marketplace Overview page.
 
 1. Choose the plan from the dropdown list. ( "Plans + Pricing" tab more details about Software plan)
@@ -25,9 +33,12 @@ A step by step walk-through for creating a new offer from the Marketplace Overvi
 
 
 
-   ```
-   Note: The create new Resource group feature is not supported 
-   ```
+   ---
+   **NOTE**
+
+   The ***Create new *** Resource group feature is not supported
+
+   ---
 
 
 
@@ -53,7 +64,7 @@ click 'Next'
 ## Review + create
 
 
-  It will summarize the offer and link to "view automation template" (Azure Resource Manager Template) 
+  It will summarize the offer and link to "view automation template" (Azure Resource Manager Template)
 
 
      Price
@@ -62,11 +73,11 @@ click 'Next'
 
 click 'Create'
 
-## Deployment Complete 
+## Deployment Complete
 
 Deployment will be in progress. After it is completed, the following resource are created
 
-1. AKS Cluster 
+1. AKS Cluster
 2. Kubernetes Service Extension
 
 click 'Go to Resource group'
@@ -102,17 +113,18 @@ The NeuVector login will appear, login with the credential which you have set du
 
 ## Navigating the console
 
-Once logged in, you can begin to [navigate and configure NeuVector](https://open-docs.neuvector.com/navigation/navigation).
+Once logged in, you can begin to [navigate and configure NeuVector]. Refer (https://open-docs.neuvector.com/navigation/navigation).
 
 
+**IMPORTANT!**
 
-```
-Important! The current NeuVector deployment exposes the original password in the Cluster 
-           configuration settings. Until this is resolved, it is suggested to change the
-           Admin password after initial login.  Edit profile in the NeuVector console
-           to change password. 
+    ---
+    The current NeuVector deployment exposes the original password in the Cluster
+    configuration settings. Until this is resolved, it is suggested to change the
+    Admin password after initial login.  Edit profile in the NeuVector console
+    to change password.
+    ---
 
-```
 
 
 1. Access NeuVector Console as a admin user
@@ -133,18 +145,19 @@ Important! The current NeuVector deployment exposes the original password in the
 
 
 
-```
-Important! Do not change or save the cluster configuration settings for Fullname, Password,
-           or Role by changing the key value pairs :
+**IMPORTANT!**
 
-                    "controller.secret.data.userinitcfg\\.yaml.users[0].Fullname"
-                    "controller.secret.data.userinitcfg\\.yaml.users[0].Password"
-                    "controller.secret.data.userinitcfg\\.yaml.users[0].Role"
+    ---
+    Do not change or save the cluster configuration settings for Fullname, Password,
+    or Role by changing the key value pairs :
 
-           Changing this value does not update the NeuVector Admin Fullname, Password, 
-           or Role. This will cause unnecessary cluster restarts.
+           "controller.secret.data.userinitcfg\\.yaml.users[0].Fullname"
+           "controller.secret.data.userinitcfg\\.yaml.users[0].Password"
+           "controller.secret.data.userinitcfg\\.yaml.users[0].Role"
 
-```
+    Changing this value does not update the NeuVector Admin Fullname, Password,
+    or Role. This will cause unnecessary cluster restarts.
+    ---
 
 
 
@@ -154,13 +167,28 @@ Important! Do not change or save the cluster configuration settings for Fullname
 
    !["Keyvaluepair config"](./keyvaluepairconfig.png)
 
+## Auto upgrade minor version
+
+By default the Kubernetes Service Extension property "Auto upgrade minor version" is enabled
+during the NeuVector offer deployment. This will allow NeuVector to regularly update
+its CVE database.
+
+Click "Refresh" in the Extension + application screen to view the latest Version.
+
+!["Enabled"](./enabled.png)
 
 
+   ---
+   **NOTE**
 
+   SUSE does not recommend disabling the "Auto upgrade minor version" feature.
+   Disabling the "Auto upgrade minor version" feature" will prevent the Neuvector
+   deployment from receiving automatic scanner updates. These updates ensure the
+   scanner is using the latest CVE/Vulnerability data.
 
+   ---
 
-
-## NeuVector Usage Record and Billing 
+## NeuVector Usage Record and Billing
 
 This command will print out CSP Adapter Usage Record:
 
@@ -190,53 +218,11 @@ Billing will be available in Azure Portal billing
 Home > Cost Management <subscription> | Cost analysis
 
 
-
-## Upgrading a NeuVector PAYG Cluster
-
-The Azure marketplace PAYG offer is periodically updated as a new versions of NeuVector are released, and for optimizations in the integration with Azure. To update the latest version of the NeuVector PAYG offering supported in the marketplace listing, use the "az k8s-extension update" command.
-
-As a Prerequisites to create extension instances in AKS cluster,  Register Azure Feature
-
-Execute the following command in Cluster Cloud Shell:
-
-```
-# Set your subscription.
-az account set --subscription <your-subId>
-
-# Register for preview features.
-az feature register --namespace Microsoft.KubernetesConfiguration --name extensionTypes
-
-# To check the state is registered
-
-az feature list -o table --query "[?contains(name, 'Microsoft.ContainerService/Microsoft.KubernetesConfiguration')].{Name:name,State:properties.state}"
-
-# Execute update command after the feature is registered.  
-az k8s-extension update  --name <cluster extension resource name>   --cluster-name <cluster name> --resource-group <resource group> --cluster-type managedClusters --version <version to be upgraded>
-
-# Update Example (Refer screenshot) 
-az k8s-extension update  --name testnv2-plan --cluster-name testnv2 --resource-group testnv-res-grp --cluster-type managedClusters --version 1.0.51
-
-```
-
-
-
-In Azure Console, Cluster > Extensions + applications screen "Provisioning State" should be in "Updating" state.
-
-
-
-
-   !["Upgrade"](./upgradeinprogress.png)
-
-
-
-
-
-
 ## Troubleshooting
 
 This section contains information to help you troubleshoot issues when install NeuVector and configure Billing-adapter
 
-After successful deployment, it should list similar pod and chart output 
+After successful deployment, it should list similar pod and chart output
 
 ```
 kubectl get deployments --all-namespaces=true
@@ -298,7 +284,6 @@ Logs from the containers of pods of the job
 kubectl logs -l job-name=<job name> -n <namespaces>
 ```
 
-
 ###NeuVector Usage Record Not found: 
 
 Error:
@@ -348,6 +333,44 @@ AKS cluster already has the extension. Uninstall the extension as it suggested i
    
    !["Uninstall extension"](./uninstall.png)
 
+
+### To check Kubernetes Service Extension version is latest:
+
+With Auto upgrade minor version" enabled, the deployment should always be on the latest version. To see the most recent published versions,
+Execute the following command in Cloud Shell
+
+```
+az k8s-extension extension-types list-versions --extension-type <extension type> -l <location name>
+
+```
+
+it should list similar output
+
+```
+[
+  {
+    "releaseTrain": "stage",
+    "versions": [
+      "1.0.55",
+      "1.0.54"
+    ]
+  },
+  {
+    "releaseTrain": "preview",
+    "versions": [
+      "1.0.55",
+      "1.0.54"
+    ]
+  },
+  {
+    "releaseTrain": "stable",
+    "versions": [
+      "1.0.55",
+      "1.0.54"
+    ]
+  }
+]
+```
 
 
 ## More information
