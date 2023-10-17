@@ -4,17 +4,17 @@ theme: suse
 ---
 body:
 
-##  How to install NeuVector and configure Billing-adapter.
+##  How to install NeuVector and configure Billing-adapter
 
 The NeuVector offer handles billing by gathering usage data from NeuVector. For complete installation, Ensure to follow all the steps
 till NeuVector Usage Record and Billing.
 
 ##Prerequisites
 
-These instructions assume you have an AKS cluster installed.
+These instructions assume you have an AKS cluster running as per the [NeuVector System requirements document](https://open-docs.neuvector.com/basics/requirements)
 
 
-A step by step walk-through for creating a new offer from the Marketplace Overview page.
+A step by step walk-through for creating a new deployment of NeuVector from the Azure Marketplace Overview page.
 
 1. Choose the plan from the dropdown list. ( "Plans + Pricing" tab more details about Software plan)
 2. Click 'Create' 
@@ -28,7 +28,7 @@ A step by step walk-through for creating a new offer from the Marketplace Overvi
    tool tip "Allow alphanumeric, and dots. And the value must be 1-253 characters long". 
 
 
-   !["Existng Resource Group"](./basiccluster.png)
+   !["Existng Resource Group"](./basicclusternv.png)
 
 
 
@@ -42,7 +42,7 @@ A step by step walk-through for creating a new offer from the Marketplace Overvi
 
 
 
-   !["New Resource Group"](./newclusternosupport.png)
+   !["New Resource Group"](./noresourcegroupver.png)
 
 
 
@@ -87,22 +87,64 @@ click 'Connect' Follow Cloud Shell instructions to Set cluster context
   1. Set the cluster subscription
   2. Download cluster credentials
 
+
+## Install Scanner Updater
+
+The NeuVector scanner image is updated daily with a new CVE database on the NeuVector docker hub registry. It is recommended to install scanner updater AFTER successful initial NeuVector deployment.
+
+Download [ scanner.yaml ](./scanner.yaml).
+Execute the following command in a Cloud Shell or Node which has access to kubectl.
+
+Install scanner:
+```
+kubectl apply  -f scanner.yaml
+```
+it should list similar output
+
+```
+deployment.apps/neuvector-scanner-pod created
+cronjob.batch/neuvector-updater-pod created
+```
+
+Check the scanner pods are running:
+```
+kubectl get pods -n neuvector
+```
+
+it should list similar output
+```
+NAME                                       READY   STATUS      RESTARTS   AGE
+neuvector-controller-pod-5687c4f89-5cdb6   1/1     Running     0          21h
+neuvector-controller-pod-5687c4f89-dqqmh   1/1     Running     0          21h
+neuvector-controller-pod-5687c4f89-jgnp9   1/1     Running     0          21h
+neuvector-csp-pod-6c6d945488-46tnj         1/1     Running     0          21h
+neuvector-enforcer-pod-28p52               1/1     Running     0          21h
+neuvector-manager-pod-5c75bd44bb-r867s     1/1     Running     0          21h
+neuvector-scanner-pod-9489c5d78-mzthg      1/1     Running     0          7s
+neuvector-scanner-pod-9489c5d78-rzjcz      1/1     Running     0          9s
+neuvector-scanner-pod-9489c5d78-v5xrq      1/1     Running     0          10s
+neuvector-updater-pod-28294240-lpshs       0/1     Completed   0          10m
+neuvector-updater-pod-28294245-xrk4n       0/1     Completed   0          5m11s
+neuvector-updater-pod-28294250-hqpcg       0/1     Completed   0          11s
+```
+
+
 ## Log into the NeuVector console
 
-The manager service type was set to Load Balancer during install. An external hostname has been assigned for accessing the NeuVector console. By default this URL is accessible from the internet. However, your organization may have placed additional restrictions on external access to your cluster. To retrieve details about the load balancer execute the following command in Cloud Shell:
+The manager service type was set to Load Balancer during install. An external hostname has been assigned for accessing the NeuVector console. By default this URL is accessible from the internet. However, your organization may have placed additional restrictions on external access to your cluster. To retrieve details about the load balancer execute the following command in Cloud Shell.
 
 ```
 kubectl get svc -n neuvector neuvector-service-webui
 ```
 
-The full dashboard url can be retrieved with the following commands:
+The full dashboard url can be retrieved with the following commands.
 
 ```
 SERVICE_IP=$(kubectl get svc --namespace neuvector neuvector-service-webui -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
 echo https://$SERVICE_IP:8443
 ```
 
-This will print out a URL that looks like: 
+This will print out a URL that looks like 
 
 ```
 https://10.20.10.1:8443
@@ -120,9 +162,9 @@ Once logged in, you can begin to [navigate and configure NeuVector]. Refer (http
 
     ---
     The current NeuVector deployment exposes the original password in the Cluster
-    configuration settings. Until this is resolved, it is suggested to change the
-    Admin password after initial login.  Edit profile in the NeuVector console
-    to change password.
+    configuration settings in Azure Portal. Until this is resolved, it is suggested
+    to change the Admin password after initial login.  Edit profile in the NeuVector
+    console to change password.
 
     ---
 
@@ -169,27 +211,6 @@ Once logged in, you can begin to [navigate and configure NeuVector]. Refer (http
 
    !["Keyvaluepair config"](./keyvaluepairconfig.png)
 
-## Auto upgrade minor version
-
-By default the Kubernetes Service Extension property "Auto upgrade minor version" is enabled
-during the NeuVector offer deployment. This will allow NeuVector to regularly update
-its CVE database.
-
-Click "Refresh" in the Extension + application screen to view the latest Version.
-
-!["Enabled"](./enabled.png)
-
-
-   ---
-   **NOTE**
-
-   SUSE does not recommend disabling the "Auto upgrade minor version" feature.
-   Disabling the "Auto upgrade minor version" feature" will prevent the Neuvector
-   deployment from receiving automatic scanner updates. These updates ensure the
-   scanner is using the latest CVE/Vulnerability data.
-
-   ---
-
 ## NeuVector Usage Record and Billing
 
 This command will print out CSP Adapter Usage Record:
@@ -198,7 +219,7 @@ This command will print out CSP Adapter Usage Record:
 kubectl get CspAdapterUsageRecord  neuvector-usage -n neuvector -oyaml
 ```
 
-Output will looks like:
+it should list similar output
 
 ```
 kubectl get CspAdapterUsageRecord  neuvector-usage -n neuvector -oyaml
@@ -218,6 +239,54 @@ reporting_time: "2023-09-12T16:32:27.012177+00:00"
 Billing will be available in Azure Portal billing
 
 Home > Cost Management <subscription> | Cost analysis
+
+
+## Uninstalling NeuVector and Scanner Updater
+
+Before Uninstalling NeuVector, uninstall the scanner updater.
+Execute the following command in a Cloud Shell or Node which has access to kubectl.
+
+```
+kubectl delete -f scanner.yaml
+```
+it should list similar output
+```
+deployment.apps "neuvector-scanner-pod" deleted
+cronjob.batch "neuvector-updater-pod" deleted
+```
+
+Check the scanner pods are running:
+```
+kubectl get pods -n neuvector
+```
+it should not list neuvector-scanner-pod in the output.
+
+```
+NAME                                        READY   STATUS    RESTARTS   AGE
+neuvector-controller-pod-754c55f668-5vnxv   1/1     Running   0          3h7m
+neuvector-controller-pod-754c55f668-658vb   1/1     Running   0          3h8m
+neuvector-controller-pod-754c55f668-bfk2c   1/1     Running   0          3h10m
+neuvector-csp-pod-cb675b47c-wnm8g           1/1     Running   0          3h15m
+neuvector-enforcer-pod-2d9qd                1/1     Running   0          3h15m
+neuvector-enforcer-pod-5lgw4                1/1     Running   0          3h15m
+neuvector-enforcer-pod-8qxdb                1/1     Running   0          3h15m
+neuvector-enforcer-pod-9gngc                1/1     Running   0          3h15m
+neuvector-enforcer-pod-9jnt7                1/1     Running   0          3h15m
+neuvector-manager-pod-59677c8ccb-4g9hj      1/1     Running   0          3h10m
+```
+
+To navigate to and uninstall NeuVector in the Azure Portal
+
+
+1. Click Home > Kubernetes Services
+2. Click the Cluster name
+3. Click Settings > Extension + application
+4. Select NeuVector Extension to Uninstall
+
+
+
+!["Uninstall extension"](./uninstall.png)
+
 
 
 ## Troubleshooting
@@ -344,6 +413,9 @@ Execute the following command in Cloud Shell.
 ```
 az k8s-extension extension-types list-versions --extension-type <extension type> -l <location name>
 
+Example
+az k8s-extension extension-types list-versions --extension-type suse.neuvector.third --location eastus
+
 ```
 
 it should list similar output
@@ -353,26 +425,49 @@ it should list similar output
   {
     "releaseTrain": "stage",
     "versions": [
-      "1.0.55",
-      "1.0.54"
+      "1.0.63",
+      "1.0.61",
+      "1.0.59"
     ]
   },
   {
     "releaseTrain": "preview",
     "versions": [
-      "1.0.55",
-      "1.0.54"
+      "1.0.63",
+      "1.0.61",
+      "1.0.59"
     ]
   },
   {
     "releaseTrain": "stable",
     "versions": [
-      "1.0.55",
-      "1.0.54"
+      "1.0.63",
+      "1.0.61",
+      "1.0.59"
     ]
   }
 ]
 ```
+
+### To check the Deployed NeuVector version:
+
+Execute the following command in Cloud Shell.
+
+```
+kubectl logs <controller pod>  -n neuvector |grep "START - version="
+
+Example command and output
+
+kubectl logs neuvector-controller-pod-8496ffff59-27vdn -n neuvector |grep "START - version="
+
+2023-10-17T16:46:38.114|INFO|CTL|main.main: START - version=v5.2.2-s1
+```
+
+Also, Deployed NeuVector version can be found in the bottom left corner of the NeuVector admin console.
+
+
+!["NV Console"](./nvdashboard.png)
+
 
 
 ## More information
