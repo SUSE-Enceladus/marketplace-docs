@@ -1,0 +1,293 @@
+title: Rancher Prime in Azure: Usage Instructions
+---
+theme: rancher
+---
+body:
+
+## Prerequisites <a name="prerequisites"></a>
+
+1. A Rancher-compatible AKS cluster. Please see
+   [Rancher support matrix](https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-7-6/)
+   for more details.
+2. An ingress installed on the AKS cluster so that Rancher is accessible outside
+   of the cluster. Please refer to [Rancher documentation](https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster/rancher-on-aks#5-install-an-ingress)
+   for instructions on how to deploy Ingress-INGINX on AKS cluster.
+3. The Rancher hostname must be a fully qualified domain name (FQDN) and its
+   corresponding IP address must be resolvable from a public DNS. Please refer
+   to [Rancher documentation](https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster/rancher-on-aks#7-set-up-dns)
+   for instructions on how to setup DNS.
+
+##  How to install Rancher and configure Billing-adapter.
+
+A step by step walk-through for creating a new offer from the Marketplace Overview page.
+
+1. Choose the plan from the dropdown list. ( "Plans + Pricing" tab more details about Software plan)
+2. Click 'Create' 
+
+### Basics
+
+1. Select existing subscription from the dropdown list.
+2. Select existing Resource group from the dropdown list.
+3. Select existing AKS Cluster Name from the dropdown list.
+4. Choose name for Cluster extension resource name. It can be consisted of
+   alphanumeric and dots, with the maximum lenght of 253 characters.
+
+   <img src="./basiccluster.png" alt="Existing Resource Group" style="border: 2px solid  gray;">
+
+   ---
+   **NOTE**
+
+   The **Create new** resource group feature is not supported.
+
+   ---
+
+   <img src="./createnewresourcegroup_ns.png" alt="Create New Resource Group Not Supported" style="border: 2px solid  gray;">
+
+click 'Next'
+
+
+
+### Rancher Configuration
+
+1. Enter the hostname for Rancher, and it must be a fully qualified domain
+   name (FQDN). The Rancher server URL will be created using this hostname.
+
+   ---
+   **NOTE**
+
+   The IP address of the Rancher hostname must be resolvable by a public DNS.
+
+   ---
+
+2. Using the slide bar, select the number of Rancher replicas.
+3. Choose bootstrap password as it is suggested by the tip. The bootstrap
+   password will be used to authenticate to the Rancher dashboard during first
+   login.
+
+   ---
+   **NOTE**
+
+   The current Rancher deployment exposes the bootstrap password in the Cluster
+   configuration settings in Azure Portal. Until this is resolved, it is
+   suggested to change the Admin password after the initial login. Edit profile
+   in the Rancher dashboard to change password.
+
+   ---
+
+   <img src="./rancherconfiguration.png" alt="Rancher Configuration" style="border: 2px solid  gray;">
+
+click 'Next'
+
+### Review + create
+
+
+  This will summarize the offer and link to "view automation template" (Azure Resource Manager Template) 
+
+
+     Price
+     Basics
+     Rancher Configuration
+
+click 'Create'
+
+### Deployment Complete 
+
+Deployment will be in progress. After it is completed, the Rancher Prime
+Kubernetes service extension is successfully installed.
+
+ ---
+ ** NOTE: **
+
+ In the "Extensions + applications" page, the "Provisioning State" may show
+ "Succeeded" even though the provision may still be in progress. You may monitor
+ the actual progragress by logging into the AKS cluster and follow the
+ "rancher-cloud" deployment.
+
+ ---
+
+## Log into the Rancher dashboard
+
+You may now login to Rancher dashboard by point your browser to Rancher server
+URL **https://<Rancher hostname\>**, where **Rancher hostname** is the hostname
+you have chosen previously.
+
+ ---
+ **NOTE**
+
+ The Rancher hostname must be resolvable by public DNS. Please refer to the
+ [Prerequisites](#prerequisites) section for more details.
+
+ ---
+
+## How To Use Rancher
+
+Please refer to the [Rancher documentation](https://ranchermanager.docs.rancher.com/)
+on how to use Rancher.
+
+## Rancher Usage Record and Billing 
+
+This command will print out CSP Adapter Usage Record:
+
+```
+kubectl get CspAdapterUsageRecord rancher-usage-record -o yaml
+```
+
+Output will look like:
+
+```
+apiVersion: susecloud.net/v1
+base_product: cpe:/o:suse:rancher:v2.7.8
+kind: CSPAdapterUsageRecord
+managed_node_count: 0
+metadata:
+  creationTimestamp: "2023-10-03T16:45:37Z"
+  generation: 480
+  name: rancher-usage-record
+  resourceVersion: "430013"
+  uid: cf47eb21-54ae-4a35-8e75-a2362a9baa4f
+reporting_time: "2023-10-04T00:44:37Z"
+```
+
+Billing will be available in the Azure Portal billing
+
+Home > Cost Management <subscription\> | Cost analysis
+
+
+## Upgrading a Rancher Prime PAYG Cluster
+
+The Azure marketplace PAYG offer is periodically updated as a new version of
+Rancher Prime are released, and for optimizations in the integration with Azure.
+To update the latest version of the Rancher Prime PAYG offering supported in
+the marketplace listing, use the "az k8s-extension update" command.
+
+Execute the following command in Cluster Cloud Shell:
+
+```
+az k8s-extension update  --name <cluster extension resource name>   --cluster-name <cluster name> --resource-group <resource group> --cluster-type managedClusters --version <version to be upgraded>
+```
+
+## Troubleshooting
+
+This section contains information to help you troubleshoot issues when install Rancher and configure Billing-adapter
+
+After successful deployment, it should list similar pod and chart output 
+
+```
+kubectl get deployments --all-namespaces=true
+```
+
+```
+NAMESPACE                           NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
+cattle-csp-billing-adapter-system   csp-rancher-usage-operator    1/1     1            1           8h
+cattle-csp-billing-adapter-system   rancher-csp-billing-adapter   1/1     1            1           8h
+cattle-fleet-local-system           fleet-agent                   1/1     1            1           8h
+cattle-fleet-system                 fleet-controller              1/1     1            1           8h
+cattle-fleet-system                 gitjob                        1/1     1            1           8h
+cattle-provisioning-capi-system     capi-controller-manager       1/1     1            1           8h
+cattle-system                       rancher                       3/3     3            3           8h
+cattle-system                       rancher-webhook               1/1     1            1           8h
+cert-manager                        cert-manager                  1/1     1            1           8h
+cert-manager                        cert-manager-cainjector       1/1     1            1           8h
+cert-manager                        cert-manager-webhook          1/1     1            1           8h
+ingress-nginx                       ingress-nginx-controller      1/1     1            1           9h
+kube-system                         coredns                       2/2     2            2           20h
+kube-system                         coredns-autoscaler            1/1     1            1           20h
+kube-system                         extension-agent               1/1     1            1           8h
+kube-system                         extension-operator            1/1     1            1           8h
+kube-system                         konnectivity-agent            2/2     2            2           20h
+kube-system                         metrics-server                2/2     2            2           20h
+```
+
+
+Jobs and Pods:
+
+Check that pods or jobs have status Running/Completed
+
+
+```
+kubectl get pods --all-namespaces
+```
+
+
+if a pod is not in Running state, you can dig into the root cause by running:
+      
+Describe pod
+
+
+```
+kubectl describe pod <pod name> -n <namespaces>
+```
+
+Pod container logs
+
+
+```
+kubectl logs <pod name> -n <namespaces>
+```
+
+Describe job
+
+
+```
+kubectl describe job <job name> -n <namespaces>
+```
+
+Logs from the containers of pods of the job
+
+```
+kubectl logs -l job-name=<job name> -n <namespaces>
+```
+
+
+###Rancher Usage Record Not found: 
+
+Error:
+
+```
+Error from server (NotFound): cspadapterusagerecords.susecloud.net "rancher-usage-record" not found"
+ Check Configuration, Retrieve generated configuration csp-config
+```
+    
+
+Solution:
+
+```
+kubectl get cm -n cattle-csp-billing-adapter-system csp-config -o yaml
+```
+
+if a configuration is not listed, you can dig into the root cause by checking the pod status and log (Refer Jobs and Pods section).
+
+
+###Multiple extensions of same type: 
+
+Error:
+
+```
+Multiple extensions of same type is not allowed at this scope. (Code: ValidationFailed)"
+```
+
+Solution:
+
+AKS cluster already has the extension with the same type. Uninstall the extension and re-deploy with the same cluster.
+
+###Resource already existing in your cluster: 
+
+Error:
+
+```
+Helm installation failed : Resource already existing in your cluster : Recommendation Manually delete the resource(s) that currently exist in your cluster and try installation again. To delete these resources run the following commands: kubectl delete <resource type> -n <resource namespace> <resource name> : InnerError [rendered manifests contain a resource that already exists. Unable to continue with install: ServiceAccount "rancher" in namespace "cattle-system" exists and cannot be imported into the current release: invalid ownership metadata; annotation validation error: key "meta.helm.sh/release-name" must equal "test-nv2-reinstall": current value is "testnv2-plan"]
+```
+
+Solution:
+
+AKS cluster already has the extension. Uninstall the extension as it suggested in the Error by deleting the resource via the kubectl command. or Uninstall the extension in Azure Console and re-deploy with the same cluster.
+
+## Known Issues
+
+1. Uninstalling Rancher Prime may not cleanly remove all the resources that were
+   created by Rancher. Users are encouraged to use
+   [Rancher cleanup script](https://github.com/rancher/rancher-cleanup) to
+   perform a more comprehensive cleanup if necessary. However, it is
+   recommended to migrate any other workloads off the cluster and prepare
+   to destroy the cluster to complete the uninstallation since cleanup is not
+   recoverable.
