@@ -468,9 +468,25 @@ Also, Deployed NeuVector version can be found in the bottom left corner of the N
 
 !["NV Console"](./nvdashboard.png)
 
+### Encode CNAB version to associate with NeuVector version
+
+The Cloud Native Application Bundle (CNAB) artifact published via the Azure marketplace have it's own specific version.
+In the format
+
+(<NEUVECTOR_MAJOR>*10000) + (<NEUVECTOR_MINOR>*100) + <NEUVECTOR_PATCH>.<NEUVECTOR_SECURITYFIX>.<DATECODE><SPIN#>
+
+<NEUVECTOR_MAJOR>, <NEUVECTOR_MINOR>, <NEUVECTOR_PATCH> and <NEUVECTOR_SECURITYFIX> are extracted from the associated product's version
+
+For NeuVector the <NEUVECTOR_SECURITYFIX> is the number after the '-s' in a security fix release, Example. for 5.2.2-s1 it would be 1;
+defaults to 0 if no security fix has been released.
+
+DATECODE format YYYYMMDD.
+
+SPIN# is the number starts at 0 and is incremented for each CNAB submission attempt in a given day, maxing out at 9.
+
+For example a CNAB providing NeuVector 5.2.2-s1 on October 17, 2023 would have a CNAB version of 50202.1.202310170.
 
 
 ## More information
 
 For further information see the [Azure Marketplace Billing doc](https://open-docs.neuvector.com/deploying/azuremarketplace) and [official NeuVector documentation](https://open-docs.neuvector.com/).
-
