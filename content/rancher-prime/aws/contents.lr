@@ -94,14 +94,40 @@ oci://709825985650.dkr.ecr.us-east-1.amazonaws.com/suse/{{repository}}/rancher-c
   --set rancherServerURL=https://$HOST_NAME \
   --set rancherReplicas=$REPLICAS \
   --set rancherBootstrapPassword=$BOOTSTRAP_PASSWORD \
+  --set rancherIngressClassName=nginx \
   --set global.aws.accountNumber=$AWS_ACCOUNT_ID \
   --set global.aws.roleName=$ROLE_NAME
 ```
 
-Monitor the rancher-cloud pod logs as the rancher-cloud pod is deleted in 1 min after a successful/failed installation
+NOTE: Monitor the rancher-cloud pod logs as the rancher-cloud pod is deleted in 1 min after a successful/failed installation
 ```
 kubectl logs -f <pod> -n cattle-rancher-csp-deployer-system
 ```
+
+After a successful deployment, running the following command should produce a similar output.
+
+```
+kubectl get deployments --all-namespaces=true
+```
+
+```
+NAMESPACE                           NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
+cattle-csp-billing-adapter-system   csp-rancher-usage-operator    1/1     1            1           30m
+cattle-csp-billing-adapter-system   rancher-csp-billing-adapter   1/1     1            1           30m
+cattle-fleet-local-system           fleet-agent                   1/1     1            1           29m
+cattle-fleet-system                 fleet-controller              1/1     1            1           29m
+cattle-fleet-system                 gitjob                        1/1     1            1           29m
+cattle-provisioning-capi-system     capi-controller-manager       1/1     1            1           28m
+cattle-system                       rancher                       1/1     1            1           32m
+cattle-system                       rancher-webhook               1/1     1            1           29m
+cert-manager                        cert-manager                  1/1     1            1           32m
+cert-manager                        cert-manager-cainjector       1/1     1            1           32m
+cert-manager                        cert-manager-webhook          1/1     1            1           32m
+ingress-nginx                       ingress-nginx-controller      1/1     1            1           33m
+kube-system                         coredns                       2/2     2            2           38m
+```
+
+Please look at the <a>Troubleshooting</a> section of this doc for a failed installation.
 
 To check if helm chart installation is completed, run following command:
 ```
@@ -111,7 +137,7 @@ helm ls -n cattle-rancher-csp-deployer-system
 After the helm chart installation is complete, you can verify the installation.
 Verify the status of the helm charts installation by running the following command:
 ```
-helm status rancher-cloud
+helm status rancher-cloud -n cattle-rancher-csp-deployer-system
 ```
 
 ### Helm Chart Installed Successfully
@@ -137,30 +163,6 @@ you have chosen previously.
 Please refer to the [Rancher documentation](https://ranchermanager.docs.rancher.com/)
 on how to use Rancher.
 
-## Rancher Usage Record and Billing
-
-This command will print out CSP Adapter Usage Record:
-
-```
-kubectl get CspAdapterUsageRecord rancher-usage-record -o yaml
-```
-
-Output will looks like:
-
-```
-apiVersion: susecloud.net/v1
-base_product: cpe:/o:suse:rancher:v2.7.8
-kind: CSPAdapterUsageRecord
-managed_node_count: 0
-metadata:
-  creationTimestamp: "2023-10-03T16:45:37Z"
-  generation: 480
-  name: rancher-usage-record
-  resourceVersion: "430013"
-  uid: cf47eb21-54ae-4a35-8e75-a2362a9baa4f
-reporting_time: "2023-10-04T00:44:37Z"
-```
-
 ## Upgrading a Rancher Prime PAYG Cluster
 
 The marketplace PAYG offer is tied to a billing adapter AND Rancher Prime version. These are updated periodically as new version of the billing adapter or Rancher are released.
@@ -174,6 +176,7 @@ oci://709825985650.dkr.ecr.us-east-1.amazonaws.com/suse/{{repository}}/rancher-c
   --set rancherServerURL=https://$HOST_NAME \
   --set rancherReplicas=$REPLICAS \
   --set rancherBootstrapPassword=$BOOTSTRAP_PASSWORD \
+  --set rancherIngressClassName=nginx \
   --set global.aws.accountNumber=$AWS_ACCOUNT_ID \
   --set global.aws.roleName=$ROLE_NAME
 ```
@@ -188,30 +191,6 @@ helm ls -n cattle-rancher-csp-deployer-system
 
 This section contains information to help you troubleshoot issues when install Rancher and configure Billing-adapter
 
-After successful deployment, it should list similar pod and chart output
-
-```
-kubectl get deployments --all-namespaces=true
-```
-
-```
-NAMESPACE                           NAME                          READY   UP-TO-DATE   AVAILABLE   AGE
-cattle-csp-billing-adapter-system   csp-rancher-usage-operator    1/1     1            1           30m
-cattle-csp-billing-adapter-system   rancher-csp-billing-adapter   1/1     1            1           30m
-cattle-fleet-local-system           fleet-agent                   1/1     1            1           29m
-cattle-fleet-system                 fleet-controller              1/1     1            1           29m
-cattle-fleet-system                 gitjob                        1/1     1            1           29m
-cattle-provisioning-capi-system     capi-controller-manager       1/1     1            1           28m
-cattle-system                       rancher                       1/1     1            1           32m
-cattle-system                       rancher-webhook               1/1     1            1           29m
-cert-manager                        cert-manager                  1/1     1            1           32m
-cert-manager                        cert-manager-cainjector       1/1     1            1           32m
-cert-manager                        cert-manager-webhook          1/1     1            1           32m
-ingress-nginx                       ingress-nginx-controller      1/1     1            1           33m
-kube-system                         coredns                       2/2     2            2           38m
-```
-
-
 Jobs and Pods:
 
 Check that pods or jobs have status Running/Completed
@@ -222,7 +201,7 @@ kubectl get pods --all-namespaces
 ```
 
 
-if a pod is not in Running state, you can debug into the root cause by running:
+If a pod is not in Running state, you can debug into the root cause by running:
 
 Describe pod
 
