@@ -1,0 +1,507 @@
+title: NeuVector Prime in Azure: Usage Instructions
+---
+theme: suse
+---
+body:
+
+##  How to install NeuVector and configure the billing adapter
+
+The NeuVector offer handles billing by gathering usage data from NeuVector.  To complete the installation, Please follow the steps
+outlined below until the section titled "NeuVector billing".
+
+## Prerequisites
+
+These instructions assume you have an AKS cluster running as per the [NeuVector System requirements document](https://open-docs.neuvector.com/basics/requirements).
+
+
+The following is a step by step walk-through for creating a new deployment of NeuVector from the Azure Marketplace page.
+
+1. Click "NeuVector Prime with 24x7 Support" offer.
+2. Choose the plan from the drop-down list. ( "Plans + Pricing" tab more details about Software plan)
+3. Click "Create"
+
+## Basics
+
+1. Select existing Subscription from the drop-down list.
+2. Select existing Resource group from the drop-down list.
+3. Select existing AKS Cluster Name from the drop-down list.
+4. Choose a name for Cluster Extension Resource name as suggested by the
+   tooltip or the following guidance; "Allows alphanumeric, dots, and the value must be between 1-253 characters long".
+
+
+   !["Existng Resource Group"](./basicclusternv.png)
+
+
+
+
+   ---
+   **NOTE**
+
+   The **Create new** Resource group feature is not supported.
+
+   ---
+
+
+
+   ["New Resource Group"](./noresourcegroupver.png)
+
+
+
+   Click "Next".
+
+
+
+## NeuVector configuration
+
+
+1. Choose an Admin password following the criteria in the tooltip.
+
+
+!["Application Details"](./adminpassword.png)
+
+
+Click "Next".
+
+## Review + create
+
+
+  There will be a summary of the offer and a link to "view automation template" (Azure Resource Manager Template)
+
+
+     Price
+     Basics
+     NeuVector Configuration
+
+Click "Create"
+
+## Deployment complete
+
+Deployment will be in progress. After it is completed, the following resources are created
+
+1. AKS Cluster
+2. Kubernetes Service Extension
+
+Click 'Go to Resource group', then click "AKS cluster" (created by offer).
+
+Click 'Connect' and follow the Cloud Shell tab instructions to set the cluster context.
+  1. Set the cluster subscription.
+  2. Download cluster credentials.
+
+
+## Install scanner deployment and updater cronjob
+
+The NeuVector scanner image is updated daily with a new CVE database on the NeuVector docker hub registry. It is required to install the scanner deployment and updater cronjob AFTER a successful initial NeuVector deployment.
+
+Download [scanner.yaml](./scanner.yaml).
+Execute the following command in a Cloud Shell or Node which has access to kubectl.
+
+Install scanner:
+```
+kubectl apply  -f scanner.yaml
+```
+The output should be similar to the example below:
+
+```
+deployment.apps/neuvector-scanner-pod created
+cronjob.batch/neuvector-updater-pod created
+```
+
+Check the scanner pods are running:
+```
+kubectl get pods -n neuvector
+```
+
+Note: The updater cronjob, by default runs once a day. After the cronjob has been run, the output should be similar to the example below with "neuvector-updater-pod-XXXXXX" with Completed status and "neuvector-scanner-pod-XXXXXX" with Running Status.
+```
+NAME                                       READY   STATUS      RESTARTS   AGE
+neuvector-controller-pod-5687c4f89-5cdb6   1/1     Running     0          21h
+neuvector-controller-pod-5687c4f89-dqqmh   1/1     Running     0          21h
+neuvector-controller-pod-5687c4f89-jgnp9   1/1     Running     0          21h
+neuvector-csp-pod-6c6d945488-46tnj         1/1     Running     0          21h
+neuvector-enforcer-pod-28p52               1/1     Running     0          21h
+neuvector-manager-pod-5c75bd44bb-r867s     1/1     Running     0          21h
+neuvector-scanner-pod-9489c5d78-mzthg      1/1     Running     0          7s
+neuvector-scanner-pod-9489c5d78-rzjcz      1/1     Running     0          9s
+neuvector-scanner-pod-9489c5d78-v5xrq      1/1     Running     0          10s
+neuvector-updater-pod-28294240-lpshs       0/1     Completed   0          10m
+neuvector-updater-pod-28294245-xrk4n       0/1     Completed   0          5m11s
+neuvector-updater-pod-28294250-hqpcg       0/1     Completed   0          11s
+```
+
+
+## Log into the NeuVector console
+
+The manager service type was set to Load Balancer during install. An external host name has been assigned for accessing the NeuVector console. By default, this URL is accessible from the Internet. However, your organization may have placed additional restrictions on external access to your cluster. To retrieve details about the load balancer, execute the following command in Cloud Shell:
+
+
+```
+kubectl get svc -n neuvector neuvector-service-webui
+```
+
+The full dashboard URL can be retrieved with the following commands:
+
+```
+SERVICE_IP=$(kubectl get svc --namespace neuvector neuvector-service-webui -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
+echo https://$SERVICE_IP:8443
+```
+
+This will print out a URL that looks like 
+
+```
+https://10.20.10.1:8443
+```
+
+This URL provides access to the NeuVector console which is running by default on port 8443. Open a browser window, paste the URL.
+The NeuVector login will appear, Log in with the credentials you have set for an admin user during offer creation.
+
+## Navigating the console
+
+Once logged in, you can begin to [navigate and configure NeuVector](https://open-docs.neuvector.com/navigation/navigation).
+
+
+**IMPORTANT!**
+
+    ---
+    The current NeuVector deployment exposes the original password in the Cluster
+    configuration settings in Azure Portal. Until this is resolved, it is suggested
+    to change the Admin password after initial login.  Edit profile in the NeuVector
+    console to change password.
+
+    ---
+
+
+
+1. Access NeuVector Console as an admin user.
+2. Click the "Admin user" drop-down and click "My Profile".
+3. Click "Edit Profile" and set a new password and click "Update Profile".
+
+
+
+
+
+
+   !["Change Admin Password"](./changepwd.png)
+
+
+
+
+
+
+
+
+**IMPORTANT!**
+
+    ---
+    Do not change or save the cluster configuration settings for Fullname, Password,
+    or Role by changing the key value pairs :
+
+           "controller.secret.data.userinitcfg\\.yaml.users[0].Fullname"
+           "controller.secret.data.userinitcfg\\.yaml.users[0].Password"
+           "controller.secret.data.userinitcfg\\.yaml.users[0].Role"
+
+    Changing this value does not update the NeuVector Admin Fullname, Password,
+    or Role. This will cause unnecessary cluster restarts.
+
+    ---
+
+
+
+
+
+
+
+   !["Keyvaluepair config"](./keyvaluepairconfig.png)
+
+## NeuVector billing
+
+The billing will be available in "Azure Portal billing".
+
+Go to Home > Cost Management <subscription> | Cost analysis.
+
+
+## Uninstalling NeuVector and scanner updater
+
+Before uninstalling NeuVector, uninstall the scanner updater.
+Execute the following command in Cloud Shell or Node which has access to kubectl.
+
+```
+kubectl delete -f scanner.yaml
+```
+The output should be similar to the example below:
+```
+deployment.apps "neuvector-scanner-pod" deleted
+cronjob.batch "neuvector-updater-pod" deleted
+```
+
+Check the scanner pods are running:
+```
+kubectl get pods -n neuvector
+```
+There should be no neuvector-scanner-pod listed in the output.
+
+```
+NAME                                        READY   STATUS    RESTARTS   AGE
+neuvector-controller-pod-754c55f668-5vnxv   1/1     Running   0          3h7m
+neuvector-controller-pod-754c55f668-658vb   1/1     Running   0          3h8m
+neuvector-controller-pod-754c55f668-bfk2c   1/1     Running   0          3h10m
+neuvector-csp-pod-cb675b47c-wnm8g           1/1     Running   0          3h15m
+neuvector-enforcer-pod-2d9qd                1/1     Running   0          3h15m
+neuvector-enforcer-pod-5lgw4                1/1     Running   0          3h15m
+neuvector-enforcer-pod-8qxdb                1/1     Running   0          3h15m
+neuvector-enforcer-pod-9gngc                1/1     Running   0          3h15m
+neuvector-enforcer-pod-9jnt7                1/1     Running   0          3h15m
+neuvector-manager-pod-59677c8ccb-4g9hj      1/1     Running   0          3h10m
+```
+
+To navigate to and uninstall NeuVector in the Azure Portal:
+
+
+1. Click Home > Kubernetes Services
+2. Click the Cluster name
+3. Click Settings > Extension + application
+4. Select NeuVector Extension and click Uninstall
+
+
+
+!["Uninstall extension"](./uninstall.png)
+
+
+
+To uninstall NeuVector using command line. Execute the following command in Cloud Shell or Node which has access to kubectl.
+
+List the Extension name.
+
+```
+az k8s-extension list -g <resource group> --cluster-type managedClusters -c <clustername> -o table
+
+Example
+az k8s-extension list -g test-nv-rg --cluster-type managedClusters -c testnv2 -o table
+```
+
+Delete the Extension.
+
+```
+az k8s-extension delete --name <extension name> --cluster-name <clustername> --resource-group <resource group> --cluster-type managedClusters -y
+
+Example
+
+az k8s-extension delete --name test-nv2-reinstall --cluster-name testnv2 --resource-group test-nv-rg --cluster-type managedClusters -y
+```
+
+Verify the extension is removed by executing list helm chart command. if it was removed, the command should not return anything.
+if the command returned similar to the following output, uninstall the NeuVector chart.
+
+List helm chart and uninstall helm chart.
+
+```
+helm  ls -n neuvector
+
+Output
+NAME            	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART     	APP VERSION
+test-nv2-reinstall	neuvector	3       	2023-10-23 23:32:34.084541125 +0000 UTC	deployed	core-2.6.4	5.2.2-s1
+
+helm uninstall -n neuvector <extension name>
+
+Example
+helm uninstall -n neuvector test-nv2-reinstall
+
+Output
+release "test-nv2-reinstall" uninstalled
+```
+
+
+## Troubleshooting
+
+This section provides troubleshooting tips for installing NeuVector and configuring the billing-adapter.
+
+After successful deployment, the deployment's list should include pod and chart output similar to the following example:
+
+```
+kubectl get deployments --all-namespaces=true
+```
+
+```
+NAMESPACE     NAME                                                      READY   UP-TO-DATE   AVAILABLE   AGE
+kube-system   addon-http-application-routing-external-dns               1/1     1            1           19m
+kube-system   addon-http-application-routing-nginx-ingress-controller   1/1     1            1           19m
+kube-system   coredns                                                   2/2     2            2           19m
+kube-system   coredns-autoscaler                                        1/1     1            1           19m
+kube-system   extension-agent                                           1/1     1            1           16m
+kube-system   extension-operator                                        1/1     1            1           16m
+kube-system   konnectivity-agent                                        2/2     2            2           19m
+kube-system   metrics-server                                            2/2     2            2           19m
+neuvector     neuvector-controller-pod                                  3/3     3            3           15m
+neuvector     neuvector-csp-pod                                         1/1     1            1           15m
+neuvector     neuvector-manager-pod                                     1/1     1            1           15m
+neuvector     neuvector-scanner-pod                                     3/3     3            3           15m
+```
+
+
+Jobs and Pods:
+
+Check that pods or jobs have the status "Running/Completed"
+
+
+```
+kubectl get pods --all-namespaces
+```
+
+
+if a pod is not in the Running state, you can debug the root cause by running:
+      
+Describe the pod:
+
+
+```
+kubectl describe pod <pod name> -n <namespaces>
+```
+
+Pod container logs:
+
+
+```
+kubectl logs <pod name> -n <namespaces>
+```
+
+Describe the job:
+
+
+```
+kubectl describe job <job name> -n <namespaces>
+```
+
+Logs from the containers of pods of the job:
+
+```
+kubectl logs -l job-name=<job name> -n <namespaces>
+```
+
+### NeuVector usage record not found: 
+
+Error:
+
+```
+Error from server (NotFound): cspadapterusagerecords.susecloud.net "neuvector-usage" not found"
+ Check Configuration, Retrieve generated configuration csp-config
+```
+    
+
+Solution:
+
+```
+kubectl get cm -n neuvector csp-config -oyaml
+```
+
+
+If a configuration is not listed, you can dig into the root cause by checking the pod status and log (refer to the "Jobs and Pods" section).
+
+### Multiple extensions of same type: 
+
+Error:
+
+```
+Multiple extensions of same type is not allowed at this scope. (Code: ValidationFailed)"
+```
+
+Solution:
+
+The AKS cluster already has an extension of the same type. Uninstall the extension and redeploy with the same cluster.
+
+   !["Uninstall extension"](./uninstall.png)
+
+### Resource already existing in your cluster: 
+
+Error:
+
+```
+Helm installation failed : Resource already existing in your cluster : Recommendation Manually delete the resource(s) that currently exist in your cluster and try installation again. To delete these resources run the following commands: kubectl delete <resource type> -n <resource namespace> <resource name> : InnerError [rendered manifests contain a resource that already exists. Unable to continue with install: ServiceAccount "csp" in namespace "neuvector" exists and cannot be imported into the current release: invalid ownership metadata; annotation validation error: key "meta.helm.sh/release-name" must equal "test-nv2-reinstall": current value is "testnv2-plan"]
+```
+
+Solution:
+
+The AKS cluster already has the extension. Uninstall the extension as it suggested in the error message by deleting the resource via the kubectl command. Alternately, uninstall the extension in Azure Console and redeploy with the same cluster.
+
+   
+   !["Uninstall extension"](./uninstall.png)
+
+
+### To check if the Kubernetes Service Extension version is latest:
+
+To see the most recent published versions, execute the following command in Cloud Shell.
+
+```
+az k8s-extension extension-types list-versions --extension-type <extension type> -l <location name>
+
+Example
+az k8s-extension extension-types list-versions --extension-type suse.neuvector.third --location eastus
+
+```
+
+The extension's command-line output should be similar to the following:
+
+```
+[
+  {
+    "releaseTrain": "stage",
+    "versions": [
+      "1.0.63",
+      "1.0.61",
+      "1.0.59"
+    ]
+  },
+  {
+    "releaseTrain": "preview",
+    "versions": [
+      "1.0.63",
+      "1.0.61",
+      "1.0.59"
+    ]
+  },
+  {
+    "releaseTrain": "stable",
+    "versions": [
+      "1.0.63",
+      "1.0.61",
+      "1.0.59"
+    ]
+  }
+]
+```
+
+### To check the deployed NeuVector version:
+
+Execute the following command in Cloud Shell:
+
+```
+kubectl logs <controller pod>  -n neuvector |grep "START - version="
+
+Example command and output
+
+kubectl logs neuvector-controller-pod-8496ffff59-27vdn -n neuvector |grep "START - version="
+
+2023-10-17T16:46:38.114|INFO|CTL|main.main: START - version=v5.2.2-s1
+```
+
+Also, the deployed NeuVector version can be found in the bottom left corner of the NeuVector admin console.
+
+
+!["NV Console"](./nvdashboard.png)
+
+### Encode CNAB version to associate with NeuVector version
+
+The Cloud Native Application Bundle (CNAB) artifact published via the Azure marketplace has it's own specific version,
+in the format ``<MAJOR>.<MINOR>.<PATCH>``.
+
+``<MAJOR> encodes the NeuVector version using the following formula (NeuVector_Major*10000) + (NeuVector_Minor*100) + NeuVector_Patch ``.
+
+``<MINOR> is NeuVector's Security Fix number, which is the number after the '-s' in a security fix release,
+e.g., for NeuVector version 5.2.2-s1, it would be 1; defaults to 0 if no security fix has been released.``
+
+``<PATCH> date on which the CNAB was published and appended with "publishing revision" counter. The date code format is YYYYMMDD and publishing revision starts at 0 and is incremented if the CNAB needs to be published multiple times on a given day.``
+
+For example a CNAB providing NeuVector 5.2.2-s1, published on October 17, 2023, would have a CNAB version of 50202.1.202310170.
+
+
+## More information
+
+For further information, see the [Azure Marketplace Billing doc](https://open-docs.neuvector.com/deploying/azuremarketplace) and [official NeuVector documentation](https://open-docs.neuvector.com/).
