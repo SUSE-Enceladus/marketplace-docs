@@ -12,6 +12,7 @@ outlined below until the section titled "NeuVector billing".
 ## Prerequisites
 
 These instructions assume you have an AKS cluster running as per the [NeuVector System requirements document](https://open-docs.neuvector.com/basics/requirements).
+The NeuVector PAYG offering can only be installed onto clusters in regions where both the Azure Kubernetes service and Azure Container Apps service are available, see the [Azure documentation](https://azure.microsoft.com/en-us/explore/global-infrastructure/products-by-region/?products=container-apps,kubernetes-service&regions=all) for details.
 
 
 The following is a step by step walk-through for creating a new deployment of NeuVector from the Azure Marketplace page.
