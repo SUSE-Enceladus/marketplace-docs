@@ -426,48 +426,48 @@ The AKS cluster already has the extension. Uninstall the extension as it suggest
    !["Uninstall extension"](./uninstall.png)
 
 
-### To check if the Kubernetes Service Extension version is latest:
+### Checking the Kubernetes Service Extension version:
 
-To see the most recent published versions, execute the following command in Cloud Shell.
+To see the most recent published extension versions, execute the following command in Cloud Shell.
+
+-  ---
+   **NOTE** if cluster is deployed in westcentralus location, execute the following command.
+           This command will also work on other regions once the feature is rolled out to other regions.
+
+-  ---
+
 
 ```
-az k8s-extension extension-types list-versions --extension-type <extension type> -l <location name>
+az k8s-extension extension-types list-versions --extension-type <extension type> -g <resource group name> --cluster-type managedClusters -c <cluster name> -o table
 
 Example
-az k8s-extension extension-types list-versions --extension-type suse.neuvector.third --location eastus
+az k8s-extension extension-types list-versions --extension-type suse.neuvector-prime-ltd-test -g nv-test-westcentralus --cluster-type managedClusters -c nv-test-10-24-2023 -o table
 
 ```
 
 The extension's command-line output should be similar to the following:
 
 ```
-[
-  {
-    "releaseTrain": "stage",
-    "versions": [
-      "1.0.63",
-      "1.0.61",
-      "1.0.59"
-    ]
-  },
-  {
-    "releaseTrain": "preview",
-    "versions": [
-      "1.0.63",
-      "1.0.61",
-      "1.0.59"
-    ]
-  },
-  {
-    "releaseTrain": "stable",
-    "versions": [
-      "1.0.63",
-      "1.0.61",
-      "1.0.59"
-    ]
-  }
-]
+Versions
+-----------------
+50202.1.202310250
+50202.1.202310244
+50202.1.202310242
+50202.1.202310200
+50202.1.202310190
 ```
+
+Listed below are the published extension versions:
+
+
+| Version |
+| --- |
+| 50202.1.202310250 |
+
+Alternatively, the latest build version in also visible in the marketplace offer listing(seen below):
+
+!["CNAB Version"](./cnabversion.png)
+
 
 ### To check the deployed NeuVector version:
 
