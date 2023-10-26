@@ -17,7 +17,7 @@ The NeuVector PAYG offering can only be installed onto clusters in regions where
 
 The following is a step by step walk-through for creating a new deployment of NeuVector from the Azure Marketplace page.
 
-1. Click "NeuVector Prime with 24x7 Support" offer.
+1. Click "NeuVector Prime with 24x7 Support" offer (either "EU and UK only" or "non-EU and non-UK only") that corresponds to the location where your account is registered.
 2. Choose the plan from the drop-down list. ( "Plans + Pricing" tab more details about Software plan)
 3. Click "Create"
 
@@ -426,48 +426,46 @@ The AKS cluster already has the extension. Uninstall the extension as it suggest
    !["Uninstall extension"](./uninstall.png)
 
 
-### To check if the Kubernetes Service Extension version is latest:
+### Checking the Kubernetes Service Extension version:
 
-To see the most recent published versions, execute the following command in Cloud Shell.
+To see the most recent published extension versions, execute the following command in Cloud Shell.
+
+-  ---
+   **NOTE** if cluster is deployed in westcentralus location, execute the following command.
+           This command will also work on other regions once the feature is rolled out to other regions.
+
+-  ---
+
 
 ```
-az k8s-extension extension-types list-versions --extension-type <extension type> -l <location name>
+az k8s-extension extension-types list-versions --extension-type <extension type> -g <resource group name> --cluster-type managedClusters -c <cluster name> -o table
 
 Example
-az k8s-extension extension-types list-versions --extension-type suse.neuvector.third --location eastus
+az k8s-extension extension-types list-versions --extension-type suse.neuvector-prime-ltd-test -g nv-test-westcentralus --cluster-type managedClusters -c nv-test-10-24-2023 -o table
 
 ```
 
 The extension's command-line output should be similar to the following:
 
 ```
-[
-  {
-    "releaseTrain": "stage",
-    "versions": [
-      "1.0.63",
-      "1.0.61",
-      "1.0.59"
-    ]
-  },
-  {
-    "releaseTrain": "preview",
-    "versions": [
-      "1.0.63",
-      "1.0.61",
-      "1.0.59"
-    ]
-  },
-  {
-    "releaseTrain": "stable",
-    "versions": [
-      "1.0.63",
-      "1.0.61",
-      "1.0.59"
-    ]
-  }
-]
+Versions
+-----------------
+50202.1.202310252
 ```
+
+Listed below are the published extension versions:
+
+
+Available Versions
+
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
+50202.1.202310252
+
+Alternatively, the latest build version in also visible in the marketplace offer listing(seen below):
+
+!["CNAB Version"](./cnabversion.png)
+
 
 ### To check the deployed NeuVector version:
 
