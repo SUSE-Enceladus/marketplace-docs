@@ -17,7 +17,7 @@ The NeuVector PAYG offering can only be installed onto clusters in regions where
 
 The following is a step by step walk-through for creating a new deployment of NeuVector from the Azure Marketplace page.
 
-1. Click "NeuVector Prime with 24x7 Support" offer.
+1. Click "NeuVector Prime with 24x7 Support" offer (either "EU and UK only" or "non-EU and non-UK only") that corresponds to the location where your account is registered.
 2. Choose the plan from the drop-down list. ( "Plans + Pricing" tab more details about Software plan)
 3. Click "Create"
 
@@ -450,19 +450,17 @@ The extension's command-line output should be similar to the following:
 ```
 Versions
 -----------------
-50202.1.202310250
-50202.1.202310244
-50202.1.202310242
-50202.1.202310200
-50202.1.202310190
+50202.1.202310252
 ```
 
 Listed below are the published extension versions:
 
 
-| Version |
-| --- |
-| 50202.1.202310250 |
+Available Versions
+
+\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
+
+50202.1.202310252
 
 Alternatively, the latest build version in also visible in the marketplace offer listing(seen below):
 
