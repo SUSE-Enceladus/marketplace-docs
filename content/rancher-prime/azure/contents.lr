@@ -7,10 +7,11 @@ body:
 ## Prerequisites <a name="prerequisites"></a>
 
 1. A Rancher-compatible AKS cluster. Please see
-   [Rancher support matrix](https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-7-6/)
+   [Rancher support matrix](https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/)
    for more details. The Rancher Prime PAYG offering can only be installed onto clusters in regions where both the
    Azure Kubernetes service and Azure Container Apps service are available, see the
    [Azure documentation](https://azure.microsoft.com/en-us/explore/global-infrastructure/products-by-region/?products=container-apps,kubernetes-service&regions=all) for details.
+   Please see [Creating an AKS cluster](https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster/rancher-on-aks#3-create-the-aks-cluster) for bringing up an AKS cluster to install Rancher Prime PAYG which is covered in the later section of this document.
 2. An ingress installed on the AKS cluster so that Rancher is accessible outside
    of the cluster. Please refer to [Rancher documentation](https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster/rancher-on-aks#5-install-an-ingress)
    for instructions on how to deploy Ingress-INGINX on AKS cluster.
@@ -19,7 +20,7 @@ body:
    to [Rancher documentation](https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster/rancher-on-aks#7-set-up-dns)
    for instructions on how to setup DNS.
 
-##  How to install Rancher and configure Billing-adapter.
+##  How to install Rancher Prime PAYG
 
 The following is a step by step walk-through for creating a new deployment of
 Rancher Prime from the Azure Marketplace page.
@@ -130,34 +131,11 @@ you have chosen previously.
 Please refer to the [Rancher documentation](https://ranchermanager.docs.rancher.com/)
 on how to use Rancher.
 
-## Rancher Usage Record and Billing 
-
-This command will print out CSP Adapter Usage Record:
-
-```
-kubectl get CspAdapterUsageRecord rancher-usage-record -o yaml
-```
-
-Output will look like:
-
-```
-apiVersion: susecloud.net/v1
-base_product: cpe:/o:suse:rancher:v2.7.8
-kind: CSPAdapterUsageRecord
-managed_node_count: 0
-metadata:
-  creationTimestamp: "2023-10-03T16:45:37Z"
-  generation: 480
-  name: rancher-usage-record
-  resourceVersion: "430013"
-  uid: cf47eb21-54ae-4a35-8e75-a2362a9baa4f
-reporting_time: "2023-10-04T00:44:37Z"
-```
+## Rancher Prime PAYG billing
 
 Billing will be available in the Azure Portal billing
 
 Home > Cost Management <subscription\> | Cost analysis
-
 
 ## Upgrading a Rancher Prime PAYG Cluster
 
