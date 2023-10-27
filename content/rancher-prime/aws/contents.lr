@@ -7,8 +7,10 @@ body:
 ## Prerequisites
 
 1. A Rancher-compatible EKS cluster. Please see
-   [Rancher support matrix](https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/rancher-v2-7-6/)
+   [Rancher support matrix](https://www.suse.com/suse-rancher/support-matrix/all-supported-versions/)
    for more details.
+   Please see [Creating an EKS cluster](https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster/rancher-on-amazon-eks#creating-an-eks-cluster-for-the-rancher-server)
+   for bringing up an EKS cluster to install Rancher Prime PAYG which is covered in the later section of this document.
 2. An ingress installed on the EKS cluster so that Rancher is accessible outside
    of the cluster. Please refer to [Rancher documentation](https://ranchermanager.docs.rancher.com/getting-started/installation-and-upgrade/install-upgrade-on-a-kubernetes-cluster/rancher-on-amazon-eks#5-install-an-ingress)
    for instructions on how to deploy Ingress-INGINX on EKS cluster.
@@ -176,7 +178,6 @@ oci://709825985650.dkr.ecr.us-east-1.amazonaws.com/suse/{{repository}}/rancher-c
   --set rancherHostname=$HOST_NAME \
   --set rancherServerURL=https://$HOST_NAME \
   --set rancherReplicas=$REPLICAS \
-  --set rancherBootstrapPassword=$BOOTSTRAP_PASSWORD \
   --set rancherIngressClassName=nginx \
   --set global.aws.accountNumber=$AWS_ACCOUNT_ID \
   --set global.aws.roleName=$ROLE_NAME
@@ -190,7 +191,7 @@ helm ls -n cattle-rancher-csp-deployer-system
 
 ## Troubleshooting
 
-This section contains information to help you troubleshoot issues when install Rancher and configure Billing-adapter
+This section contains information to help you troubleshoot issues when installing Rancher Prime PAYG.
 
 Jobs and Pods:
 
@@ -252,7 +253,6 @@ oci://709825985650.dkr.ecr.us-east-1.amazonaws.com/suse/{{repository}}/rancher-c
   --set rancherHostname=$HOST_NAME \
   --set rancherServerURL=https://$HOST_NAME \
   --set rancherReplicas=$REPLICAS \
-  --set rancherBootstrapPassword=$BOOTSTRAP_PASSWORD \
   --set global.aws.accountNumber=$AWS_ACCOUNT_ID \
   --set global.aws.roleName=$ROLE_NAME
 ```
@@ -277,10 +277,20 @@ if a configuration is not listed, you can debug into the root cause by checking 
 
 ## Known Issues
 
-1. Uninstalling Rancher Prime may not cleanly remove all the resources that were
+1. Uninstalling Rancher Prime:
+    ```
+    helm uninstall -n cattle-rancher-csp-deployer-system rancher-cloud
+    ```
+   Uninstalling Rancher Prime may not cleanly remove all the resources that were
    created by Rancher. Users are encouraged to use
    [Rancher cleanup script](https://github.com/rancher/rancher-cleanup) to
    perform a more comprehensive cleanup if necessary. However, it is
    recommended to migrate any other workloads off the cluster and prepare
    to destroy the cluster to complete the uninstallation since cleanup is not
    recoverable.
+
+2. When migrating Rancher to a different EKS by following the steps specified in
+   [Rancher Backups and Disaster Recovery](https://ranchermanager.docs.rancher.com/pages-for-subheaders/backup-restore-and-disaster-recovery),
+   Rancher Prime must be reinstalled on the target EKS cluster after restoring from the backup.
+   Furthermore, the restored Rancher version must not be newer than the version
+   available in the AWS marketplace.
