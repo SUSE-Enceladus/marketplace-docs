@@ -6,7 +6,7 @@ body:
 
 ##  How to install NeuVector and configure the billing adapter
 
-The NeuVector offer handles billing by gathering usage data from NeuVector.  To complete the installation, Please follow the steps
+The NeuVector offer handles billing by gathering usage data from NeuVector.  To complete the installation, please follow the steps
 outlined below until the section titled "NeuVector billing".
 
 ## Prerequisites
@@ -426,22 +426,25 @@ The AKS cluster already has the extension. Uninstall the extension as it suggest
    !["Uninstall extension"](./uninstall.png)
 
 
-### Checking the Kubernetes Service Extension version:
+###Upgrading a NeuVector Prime PAYG Cluster
 
-To see the most recent published extension versions, execute the following command in Cloud Shell.
+Updating the NeuVector version to the latest version available in the marketplace listing can be accomplished using the "az k8s-extension update" command.
 
--  ---
-   **NOTE** if cluster is deployed in westcentralus location, execute the following command.
-           This command will also work on other regions once the feature is rolled out to other regions.
+The following az k8s-extension commands should be executed in a Cluster Cloud Shell or or Node which has access to Azure CLI:
 
 -  ---
+   **NOTE:**  if cluster is deployed in westcentralus location, execute the following command to view the available versions.
+            This command will also work in other regions once the feature is rolled out to those regions.
 
+-  ---
+
+To see the most recent published extension version available as an upgrade.
 
 ```
-az k8s-extension extension-types list-versions --extension-type <extension type> -g <resource group name> --cluster-type managedClusters -c <cluster name> -o table
+az k8s-extension extension-types list-versions-by-cluster --extension-type <extension type> -g <resource group name> --cluster-type managedClusters -c <cluster name> -o table
 
 Example
-az k8s-extension extension-types list-versions --extension-type suse.neuvector-prime-ltd-test -g nv-test-westcentralus --cluster-type managedClusters -c nv-test-10-24-2023 -o table
+az k8s-extension extension-types list-versions-by-cluster --extension-type suse.neuvector-prime-ltd-test -g nv-test-westcentralus --cluster-type managedClusters -c nv-test-10-24-2023 -o table
 
 ```
 
@@ -451,6 +454,12 @@ The extension's command-line output should be similar to the following:
 Versions
 -----------------
 50202.1.202310252
+```
+
+Execute the following command to perform the extension update:
+
+```
+az k8s-extension update  --name <cluster extension resource name>   --cluster-name <cluster name> --resource-group <resource group> --cluster-type managedClusters --version <version to be upgraded>
 ```
 
 Listed below are the published extension versions:
