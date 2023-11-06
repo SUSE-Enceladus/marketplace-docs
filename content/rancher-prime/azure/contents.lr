@@ -131,6 +131,17 @@ you have chosen previously.
 Please refer to the [Rancher documentation](https://ranchermanager.docs.rancher.com/)
 on how to use Rancher.
 
+After logging into Rancher Prime, you should notice the
+**Welcome to Rancher Prime** message at the top of the screen.
+
+<img src="./rancher-prime-home.png" alt="Welcome to Rancher Prime" width="100%" height="100%" style="border: 2px solid  gray;">
+
+If your Rancher Prime PAYG deployment only has **Welcome to Rancher**
+at the top of the screen, please ensure you've updated to the latest version,
+and reset the branding to default (i.e. "suse") from **Global Settings**.
+
+<img src="./rancher-prime-global-settings.png" alt="Rancher Prime Global Settings" width="100%" height="100%" style="border: 2px solid  gray;">
+
 ## Rancher Prime PAYG billing
 
 Billing will be available in the Azure Portal billing
