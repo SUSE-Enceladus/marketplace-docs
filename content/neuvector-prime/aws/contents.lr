@@ -96,7 +96,10 @@ helm install -n neuvector neuvector --create-namespace \
 oci://709825985650.dkr.ecr.us-east-1.amazonaws.com/suse/{{repository}}/core \
   --version {{chart_version}} \
   --set awsbilling.accountNumber=$AWS_ACCOUNT_ID \
-  --set awsbilling.roleName=$ROLE_NAME
+  --set awsbilling.roleName=$ROLE_NAME \
+  --set containerd.enabled=true \
+  --set aws.enabled=true \
+  --set manager.svc.type=LoadBalancer
 ```
 
 ## Log into the NeuVector dashboard
