@@ -432,12 +432,6 @@ Updating the NeuVector version to the latest version available in the marketplac
 
 The following az k8s-extension commands should be executed in a Cluster Cloud Shell or or Node which has access to Azure CLI:
 
--  ---
-   **NOTE:**  if cluster is deployed in westcentralus location, execute the following command to view the available versions.
-            This command will also work in other regions once the feature is rolled out to those regions.
-
--  ---
-
 To see the most recent published extension version available as an upgrade.
 
 ```
