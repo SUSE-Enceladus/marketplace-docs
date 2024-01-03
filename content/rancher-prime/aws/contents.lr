@@ -166,6 +166,7 @@ you have chosen previously.
 Please refer to the [Rancher documentation](https://ranchermanager.docs.rancher.com/)
 on how to use Rancher.
 
+<a id="upgrading">&nbsp;</a>
 ## Upgrading a Rancher Prime PAYG Cluster
 
 The marketplace PAYG offer is tied to a billing adapter AND Rancher Prime version. These are updated periodically as new version of the billing adapter or Rancher are released.

@@ -148,6 +148,7 @@ Billing will be available in the Azure Portal billing
 
 Home > Cost Management <subscription\> | Cost analysis
 
+<a id="upgrading">&nbsp;</a>
 ## Upgrading a Rancher Prime PAYG Cluster
 
 The Azure marketplace PAYG offer is periodically updated as a new version of
