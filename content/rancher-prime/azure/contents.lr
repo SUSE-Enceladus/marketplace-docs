@@ -33,11 +33,12 @@ Rancher Prime from the Azure Marketplace page.
 
 ### Basics
 
-1. Select existing subscription from the dropdown list.
-2. Select existing Resource group from the dropdown list.
-3. Select existing AKS Cluster Name from the dropdown list.
-4. Choose name for Cluster extension resource name. It can be consisted of
-   alphanumeric and dots, and the length must be between 2 and 253 characters.
+1. Select an existing subscription from the dropdown list.
+2. Select an existing Resource group from the dropdown list.
+3. Select an existing AKS Cluster Name from the dropdown list.
+4. Choose a name for the Cluster extension resource. The name must be between
+   2 and 253 characters in length and contain only alphanumeric characters
+   and dots.
 
    <img src="./basiccluster.png" alt="Existing Resource Group" style="border: 2px solid  gray;">
 
@@ -280,7 +281,8 @@ AKS cluster already has the extension. Uninstall the extension as it suggested i
 
 ## Known Issues
 
-1. When migrating Rancher to a different AKS by following the steps specified in
+1. When migrating Rancher to a different AKS cluster by following the steps
+   specified in
    [Rancher Backups and Disaster Recovery](https://ranchermanager.docs.rancher.com/pages-for-subheaders/backup-restore-and-disaster-recovery), Rancher Prime must be reinstalled via the Azure
    marketplace on the target AKS cluster after restoring from the backup.
    Furthermore, the restored Rancher version must not be newer than the version
