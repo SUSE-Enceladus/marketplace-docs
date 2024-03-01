@@ -95,8 +95,8 @@ Install Neuvector into your cluster using *helm*. Customize your helm installati
 helm install -n neuvector neuvector --create-namespace \
 oci://709825985650.dkr.ecr.us-east-1.amazonaws.com/suse/{{repository}}/core \
   --version {{chart_version}} \
-  --set awsbilling.accountNumber=$AWS_ACCOUNT_ID \
-  --set awsbilling.roleName=$ROLE_NAME
+  --set global.aws.accountNumber=$AWS_ACCOUNT_ID \
+  --set global.aws.roleName=$ROLE_NAME
 ```
 
 ## Log into the NeuVector dashboard
