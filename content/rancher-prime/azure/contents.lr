@@ -279,6 +279,15 @@ Solution:
 
 AKS cluster already has the extension. Uninstall the extension as it suggested in the Error by deleting the resource via the kubectl command. or Uninstall the extension in Azure Console and re-deploy with the same cluster.
 
+
+### Support configuration does not display the rancher product information or the upgraded product version
+
+Once the rancher-cloud components are installed, the support configuration takes approximately an hour to show the
+product information. In an upgrade scenario, the support config might still have base_product field reference to 
+the pre-upgrade version but after the next usage update (approximately in an hour), the support config should reflect the 
+upgraded version.
+
+
 ## Known Issues
 
 1. When migrating Rancher to a different AKS cluster by following the steps
