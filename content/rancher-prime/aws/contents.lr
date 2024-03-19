@@ -276,6 +276,13 @@ kubectl get cm -n cattle-csp-billing-adapter-system csp-config -o yaml
 if a configuration is not listed, you can debug into the root cause by checking the pod status and log (Refer Jobs and Pods section).
 
 
+### Support configuration does not display the rancher product information or the upgraded product version
+
+Once the rancher-cloud components are installed, the support configuration takes approximately an hour to show the
+product information. In an upgrade scenario, the support config might still have base_product field reference to 
+the pre-upgrade version but after the next usage update (approximately in an hour), the support config should reflect the 
+upgraded version.
+
 ## Known Issues
 
 1. Uninstalling Rancher Prime:
