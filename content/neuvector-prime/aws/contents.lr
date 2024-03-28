@@ -13,6 +13,8 @@ body:
 * `eksctl`
 * `helm` (v3 or greater)
 
+**⚠ NOTE:** *You may need to add* `--profile` *or* `--region` *arguments to your* `aws` *or* `eksctl` *commands, as required for your environment.*
+
 ## Preparing your cluster
 
 ### OIDC provider
