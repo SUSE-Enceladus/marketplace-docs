@@ -50,6 +50,7 @@ eksctl create iamserviceaccount \
   --namespace neuvector --cluster $CLUSTER_NAME \
   --role-name $ROLE_NAME --role-only \
   --attach-policy-arn 'arn:aws:iam::aws:policy/AWSMarketplaceMeteringFullAccess' \
+  --name csp \
   --approve
 ```
 
