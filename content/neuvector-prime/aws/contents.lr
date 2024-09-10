@@ -54,16 +54,6 @@ eksctl create iamserviceaccount \
   --approve
 ```
 
-## Admin password
-
-The initial password for the _admin_ account will be randomly generated during deployment. When the _helm_ chart deployment completes, use the following command to retrieve the initial password:
-
-```
-kubectl get secret --namespace neuvector neuvector-bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}'
-```
-
-⚠ *We recommend that this password be changed after the first login.*
-
 ## Installing Neuvector
 
 Log *helm* into the AWS Marketplace ECR, to fetch the application. Note that the AWS Marketplace ECR is always in the `us-east-1` region:
@@ -85,6 +75,16 @@ oci://709825985650.dkr.ecr.us-east-1.amazonaws.com/suse/{{repository}}/core \
   --set global.aws.accountNumber=$AWS_ACCOUNT_ID \
   --set global.aws.roleName=$ROLE_NAME
 ```
+
+## Admin password
+
+The initial password for the _admin_ account will be randomly generated during deployment. When the _helm_ chart deployment completes, use the following command to retrieve the initial password:
+
+```
+kubectl get secret --namespace neuvector neuvector-bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}'
+```
+
+⚠ *We recommend that this password be changed after the first login.*
 
 ## Log into the NeuVector dashboard
 
