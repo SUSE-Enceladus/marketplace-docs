@@ -56,29 +56,13 @@ eksctl create iamserviceaccount \
 
 ## Admin password
 
-Create a file named `userinitcfg.yaml` in your current working directory, with the following template, where:
-
-* `$PASSWORD` is the initial password for the _admin_ account.
-
-  **⚠ The password is required to contain at least 8 characters, at least 1 uppercase character, at least 1 lowercase character and at least 1 number.**
+The initial password for the _admin_ account will be randomly generated during deployment. When the _helm_ chart deployment completes, use the following command to retrieve the initial password:
 
 ```
-users:
-- Fullname: admin
-  Password: $PASSWORD
-  Role: admin
+kubectl get secret --namespace neuvector neuvector-bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}'
 ```
 
-Deploy this config to your EKS cluster:
-
-```
-kubectl create namespace neuvector
-kubectl create secret generic neuvector-init \
-  --from-file=userinitcfg.yaml -n neuvector
-```
-
-This step is mandatory: the _admin_ user will not be created unless configured with a user-specified password, making the NeuVector deployment unmanageable.
-
+⚠ *We recommend that this password be changed after the first login.*
 
 ## Installing Neuvector
 
