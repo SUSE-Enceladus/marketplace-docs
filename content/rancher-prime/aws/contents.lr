@@ -49,11 +49,23 @@ If there is no output, you will need to create an OIDC provider:
 eksctl utils associate-iam-oidc-provider --cluster $CLUSTER_NAME --region $REGION --approve
 ```
 
+### Verification
+
+Check the MetadataOptions of the EC2 instances which are part of the EKS cluster:
+```
+aws ec2 describe-instances --instance-id <instance id name>
+```
+If the MetadataOptions.HttpPutResponseHopLimit is 1, set it to 2 as follows so the pods are able to successfully access the EC2 instance metadata service. :
+```
+aws ec2 modify-instance-metadata-options --instance-id <instance id name> --http-put-response-hop-limit 2 --http-endpoint enabled
+```
+
 ### IAM Role
 
 To provide the necessary permissions, an IAM role and an attached policy are required. The role name is passed as an argument during the *helm* deployment.
 
-Create the role with a *role name* of your choosing (for example, `rancher-csp-iam-role`), and the required policy attached to it:
+Create the role with a *role name* of your choosing (for example, `rancher-csp-iam-role`), and the required policy attached to it.
+Define and export the variables CLUSTER_NAME, REGION, ROLE_NAME accordingly, then run the eksctl command:
 
 ```
 eksctl create iamserviceaccount \
