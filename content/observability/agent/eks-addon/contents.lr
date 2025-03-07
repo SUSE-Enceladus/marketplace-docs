@@ -1,4 +1,4 @@
-title: SUSE Observabilility Agent as an EKS Addon
+title: SUSE Cloud Observabilility Agent as an EKS Addon
 ---
 theme: suse
 ---
@@ -57,8 +57,8 @@ The SUSE Cloud Observability agent for EKS will now be present on the **Add-ons*
 
 ![Screenshot of the Add-ons tab of an EKS cluster](screenshot_eks_addons_1.png)
 
-Shortly, the newly created Kubernetes StackPack in SUSE Observability Cloud should change status to "*Active*".
+Shortly, the newly created Kubernetes StackPack in SUSE Observability should change status to "*Active*".
 
 ![Screenshot of Kubernetes StackPacks in SUSE Observability, now active](screenshot_create_stackpack_3.png)
 
-**Congratulations!** You have successfully configured the SUSE Observabilility Agent as an EKS Addon.
+**Congratulations!** You have successfully configured the SUSE Cloud Observabilility Agent as an EKS Addon.
