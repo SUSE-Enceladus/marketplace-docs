@@ -1,0 +1,64 @@
+title: SUSE Observabilility Agent as an EKS Addon
+---
+theme: suse
+---
+body:
+
+## Prerequisites
+
+1. These instructions assume you have subscribed to the SUSE Cloud Observability agent for EKS offer in AWS Marketplace, and have meet AWS' [prerequisites for creating an EKS addon](https://docs.aws.amazon.com/eks/latest/userguide/creating-an-add-on.html#creating-an-add-on-prereq).
+2. You must have access to, or operate a SUSE Cloud Observability service. See https://more.suse.com/SUSE_Cloud_Observability_Early_Access_Program.html to get started.
+
+## Optional configuration settings
+
+In order to connect the agent to your SUSE Cloud Observability account, you must provide configuration values to the EKS Addon as "*Optional configuration settings*".
+
+### Web Console
+
+From **Step 3: Review and add** of the **Add add-ons** process, click the *Edit* button on "*Step 2: Configure selected add-ons-settings*"
+
+![Screenshot of "Add add-ons" Step 3](screenshot_add_add-ons_1.png)
+
+On the **Configure selected add-ons settings** page, click on "*Optional configuration settings*" to expand the section.
+
+![Screenshot of "Add add-ons" Step 2](screenshot_add_add-ons_2.png)
+
+Copy the following snippet, and paste into the **Configuration values** textbox:
+
+```yaml
+stackstate:
+  cluster:
+    name: <Cluster Name>
+  url: <StackState Ingest URL>
+  apiKey:  <Api Key>
+```
+
+On your SUSE Cloud Observability account, Add a new instance of the Kubernetes StackPack.
+
+![Screenshot of Kubernetes StackPacks in SUSE Observability](screenshot_create_stackpack_1.png)
+
+Enter the name of your kubernetes cluster, then click *INSTALL*. SUSE Observablity Cloud will update to show "**The SUSE Observability Kubernetes StackPack is waiting for data**".
+
+![Screenshot of Kubernetes StackPacks in SUSE Observability waiting for data](screenshot_create_stackpack_2.png)
+
+Copy the **Cluster Name** content. Go back to the **Configure selected add-ons settings** page, and replace `<Cluster Name>` in your **Configuration values** with the **Cluster Name**.
+
+Go back to the **SUSE Observability Kubernetes StackPacks** page, and copy the **StackState Ingest URL** content. Go back to the **Configure selected add-ons settings** page, and replace `<StackState Ingest URL>` in your **Configuration values** with the **StackState Ingest URL**.
+
+Once more, go back to the **SUSE Observability Kubernetes StackPacks** page, and copy the **Api Key** content. Go back to the **Configure selected add-ons settings** page, and replace `<Api Key>` in your **Configuration values** with the **Api Key**.
+
+Select "*None*" as the **Conflict resolution method.
+
+![Screenshot of "Add add-ons" Step 2](screenshot_add_add-ons_3.png)
+
+Click *Next*. Back on the **Review and add** page, click *Create*.
+
+The SUSE Cloud Observability agent for EKS will now be present on the **Add-ons** tab, with a status of "*Creating*".
+
+![Screenshot of the Add-ons tab of an EKS cluster](screenshot_eks_addons_1.png)
+
+Shortly, the newly created Kubernetes StackPack in SUSE Observability Cloud should change status to "*Active*".
+
+![Screenshot of Kubernetes StackPacks in SUSE Observability, now active](screenshot_create_stackpack_3.png)
+
+**Congratulations!** You have successfully configured the SUSE Observabilility Agent as an EKS Addon.
