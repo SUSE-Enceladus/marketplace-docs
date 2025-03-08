@@ -57,6 +57,10 @@ pre {
   max-width: 960px;
 }
 
+img {
+  max-width: 100%;
+}
+
 footer {
   margin-top: 1em;
   border-top: 1px solid var(--fog);
