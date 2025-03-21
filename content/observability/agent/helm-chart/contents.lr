@@ -1,0 +1,46 @@
+title: SUSE Cloud Observabilility Agent via Helm Chart
+---
+theme: suse
+---
+body:
+
+## Prerequisites
+
+1. These instructions assume you have subscribed to the SUSE Cloud Observability agent for EKS offer in AWS Marketplace, have meet AWS' [prerequisites for deploying applications with Helm](https://docs.aws.amazon.com/eks/latest/userguide/helm.html), and have meet the [SUSE Observability prerequisites](https://docs.stackstate.com/get-started/k8s-quick-start-guide#prerequisites-for-amazon-eks).
+2. You must have access to, or operate a SUSE Cloud Observability service. See https://more.suse.com/SUSE_Cloud_Observability_Early_Access_Program.html to get started.
+
+## Required values
+
+In order to connect the agent to your SUSE Cloud Observability account, you must provide some values along with the helm chart installation.
+
+### SUSE Observability Web Console
+
+On your SUSE Cloud Observability account, Add a new instance of the Kubernetes StackPack.
+
+![Screenshot of Kubernetes StackPacks in SUSE Observability](screenshot_create_stackpack_1.png)
+
+Enter the name of your kubernetes cluster, then click *INSTALL*. SUSE Observablity Cloud will update to show "**The SUSE Observability Kubernetes StackPack is waiting for data**".
+
+![Screenshot of Kubernetes StackPacks in SUSE Observability waiting for data](screenshot_create_stackpack_2.png)
+
+### Helm Command Line
+
+Install the Cluster Agent StackPack with the following `helm` command:
+
+```sh
+helm install \
+--set-string 'stackstate.apiKey'='<Api Key>' \
+--set-string 'stackstate.cluster.name'='<Cluster Name>' \
+--set-string 'stackstate.url'='<StackState Ingest URL>' \
+stackstate/stackstate-k8s-agent
+```
+
+Be sure to replace the `<Api Key>`, `<Cluster Name>`, and `<StackState Ingest URL>` with the values of the same name, provided in the SUSE Observability web console.
+
+💡 *Additonal values can be configured, as required. See the [helm chart documentation](https://github.com/StackVista/helm-charts/blob/suse-observability/2.3.0/stable/suse-observability-agent/README.md#values) for all available values.*
+
+Shortly, the StackPack will be installed and will immediately begin reporting data to SUSE Observability:
+
+![Screenshot of Kubernetes StackPacks in SUSE Observability, now active](screenshot_create_stackpack_3.png)
+
+**Congratulations!** You have successfully configured the SUSE Cloud Observabilility Agent via Helm Chart.
