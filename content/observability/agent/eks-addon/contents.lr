@@ -6,8 +6,8 @@ body:
 
 ## Prerequisites
 
-1. These instructions assume you have subscribed to the SUSE Cloud Observability agent for EKS offer in AWS Marketplace, and have meet AWS' [prerequisites for creating an EKS addon](https://docs.aws.amazon.com/eks/latest/userguide/creating-an-add-on.html#creating-an-add-on-prereq).
-2. You must have access to, or operate a SUSE Cloud Observability service. See https://more.suse.com/SUSE_Cloud_Observability_Early_Access_Program.html to get started.
+1. These instructions assume you have subscribed to the SUSE Cloud Observability agent for EKS offer in AWS Marketplace, and have met AWS' [prerequisites for creating an EKS addon](https://docs.aws.amazon.com/eks/latest/userguide/creating-an-add-on.html#creating-an-add-on-prereq).
+2. You must have access to, or operate a SUSE Cloud Observability service. See https://www.suse.com/products/cloud/observability/ to get started.
 
 ## Optional configuration settings
 
