@@ -6,7 +6,7 @@ body:
 
 ## Prerequisites
 
-1. These instructions assume you have subscribed to the SUSE Cloud Observability agent for EKS offer in AWS Marketplace, have meet AWS' [prerequisites for deploying applications with Helm](https://docs.aws.amazon.com/eks/latest/userguide/helm.html), and have meet the [SUSE Observability prerequisites](https://docs.stackstate.com/get-started/k8s-quick-start-guide#prerequisites-for-amazon-eks).
+1. These instructions assume you have subscribed to the SUSE Cloud Observability agent for EKS offer in AWS Marketplace, have met AWS' [prerequisites for deploying applications with Helm](https://docs.aws.amazon.com/eks/latest/userguide/helm.html), and have met the [SUSE Observability prerequisites](https://docs.stackstate.com/get-started/k8s-quick-start-guide#prerequisites-for-amazon-eks).
 2. You must have access to, or operate a SUSE Cloud Observability service. See https://more.suse.com/SUSE_Cloud_Observability_Early_Access_Program.html to get started.
 
 ## Required values
